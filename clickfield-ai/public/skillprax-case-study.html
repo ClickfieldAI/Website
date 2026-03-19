@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>SkillPrax × AdRadar — Case Study Section</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #07080c;
+            --surface: #0e1018;
+            --card: #131620;
+            --border: rgba(255, 255, 255, 0.07);
+            --border-bright: rgba(0, 245, 255, 0.22);
+            --cyan: #00f5ff;
+            --violet: #7c3aff;
+            --magenta: #f02afc;
+            --green: #00ff88;
+            --white: #eef0f8;
+            --muted: #5e6577;
+            --muted2: #8892a4;
+            --hot: #ff4f4f;
+            --warm: #f5a623;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, rgba(0, 245, 255, 0.06) 1px, transparent 1px);
+            background-size: 38px 38px;
+            mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 30%, transparent 100%)
+        }
+
+        /* ── SECTION SHELL ── */
+        .cs-section {
+            padding: 7rem 3rem;
+            position: relative;
+            z-index: 1
+        }
+
+        .cs-section-inner {
+            max-width: 1140px;
+            margin: 0 auto
+        }
+
+        .s-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--cyan);
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            margin-bottom: 0.9rem
+        }
+
+        .s-title {
+            font-size: clamp(2rem, 3.8vw, 3.8rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+            margin-bottom: 1.4rem
+        }
+
+        .s-title em {
+            font-style: italic;
+            font-weight: 300;
+            color: var(--muted2)
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border) 15%, var(--border) 85%, transparent)
+        }
+
+        /* ── SCROLL REVEAL ── */
+        .r {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .7s ease, transform .7s ease
+        }
+
+        .r.v {
+            opacity: 1;
+            transform: none
+        }
+
+        .r.d1 {
+            transition-delay: .1s
+        }
+
+        .r.d2 {
+            transition-delay: .2s
+        }
+
+        .r.d3 {
+            transition-delay: .3s
+        }
+
+        .r.d4 {
+            transition-delay: .4s
+        }
+
+        /* ── PROGRESS BAR ── */
+        #prog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--violet));
+            z-index: 999;
+            transition: width .1s
+        }
+
+        /* ── HERO STAT BANNER ── */
+        .hero-banner {
+            position: relative;
+            padding: 6rem 3rem 5rem;
+            background: linear-gradient(135deg, #070812 0%, #0c0820 55%, #08080e 100%);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(0, 245, 255, 0.08), transparent 70%);
+            pointer-events: none
+        }
+
+        .hero-banner-inner {
+            max-width: 1140px;
+            margin: 0 auto
+        }
+
+        .hb-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem
+        }
+
+        .hb-pill {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--cyan);
+            border: 1px solid var(--border-bright);
+            padding: 0.3rem 0.9rem;
+            background: rgba(0, 245, 255, 0.06)
+        }
+
+        .hb-sep {
+            width: 36px;
+            height: 1px;
+            background: var(--border-bright)
+        }
+
+        .hb-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase
+        }
+
+        .hb-title {
+            font-size: clamp(2.5rem, 5.5vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.06;
+            letter-spacing: -0.035em;
+            max-width: 800px;
+            margin-bottom: 1.8rem
+        }
+
+        .hb-title .light {
+            font-weight: 300;
+            color: rgba(238, 240, 248, 0.42)
+        }
+
+        .hb-title .accent {
+            background: linear-gradient(90deg, var(--cyan), var(--violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .hb-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--muted2);
+            max-width: 560px;
+            line-height: 1.9;
+            margin-bottom: 3.5rem
+        }
+
+        /* stat grid */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border)
+        }
+
+        .sg-box {
+            background: rgba(10, 11, 20, 0.92);
+            padding: 2.2rem 1.8rem;
+            position: relative;
+            transition: background .3s;
+            cursor: default
+        }
+
+        .sg-box:hover {
+            background: rgba(0, 245, 255, 0.04)
+        }
+
+        .sg-box::before,
+        .sg-box::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px
+        }
+
+        .sg-box::before {
+            top: -1px;
+            left: -1px;
+            border-top: 1px solid rgba(0, 245, 255, 0.4);
+            border-left: 1px solid rgba(0, 245, 255, 0.4)
+        }
+
+        .sg-box::after {
+            bottom: -1px;
+            right: -1px;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.4);
+            border-right: 1px solid rgba(0, 245, 255, 0.4)
+        }
+
+        .sg-num {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, var(--cyan) 0%, #a080ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .sg-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            letter-spacing: 0.13em;
+            color: var(--muted);
+            margin-top: 0.4rem
+        }
+
+        .sg-delta {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--green);
+            margin-top: 0.5rem
+        }
+
+        /* ── CHALLENGE ── */
+        .challenge-bg {
+            background: var(--surface)
+        }
+
+        .split-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start
+        }
+
+        .prose p {
+            font-size: 0.9rem;
+            color: var(--muted2);
+            line-height: 1.9;
+            margin-bottom: 1rem
+        }
+
+        .prose strong {
+            color: var(--white);
+            font-weight: 600
+        }
+
+        .prose .hl {
+            color: var(--cyan);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.78rem
+        }
+
+        /* pain list */
+        .pain-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            background: var(--border)
+        }
+
+        .pain-item {
+            background: var(--card);
+            padding: 1.2rem 1.4rem;
+            border-left: 2px solid transparent;
+            transition: border-color .3s
+        }
+
+        .pain-item:hover {
+            border-left-color: var(--hot)
+        }
+
+        .pi-icon {
+            font-size: 0.85rem;
+            color: var(--hot);
+            margin-bottom: 0.3rem
+        }
+
+        .pi-title {
+            font-size: 0.86rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem
+        }
+
+        .pi-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--muted2);
+            line-height: 1.65
+        }
+
+        /* ── PROCESS TIMELINE ── */
+        .process-track {
+            margin-top: 3rem;
+            position: relative
+        }
+
+        .process-track::before {
+            content: '';
+            position: absolute;
+            left: 2rem;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--cyan), var(--violet), transparent)
+        }
+
+        .pt-step {
+            display: grid;
+            grid-template-columns: 4.5rem 1fr;
+            gap: 2rem;
+            padding: 1.6rem 0;
+            border-bottom: 1px solid var(--border);
+            position: relative
+        }
+
+        .pt-step:last-child {
+            border-bottom: none
+        }
+
+        .pt-step:hover .pt-num {
+            border-color: var(--cyan);
+            color: var(--cyan)
+        }
+
+        .pt-num {
+            width: 4rem;
+            height: 4rem;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--muted);
+            background: var(--surface);
+            flex-shrink: 0;
+            transition: all .3s;
+            z-index: 1;
+            position: relative
+        }
+
+        .pt-title {
+            font-size: 0.92rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem
+        }
+
+        .pt-desc {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.67rem;
+            color: var(--muted2);
+            line-height: 1.7;
+            margin-bottom: 0.45rem
+        }
+
+        .pt-tool {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            color: var(--cyan);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            padding: 0.12rem 0.5rem;
+            display: inline-block
+        }
+
+        /* ── SIGNAL STRIP ── */
+        .signal-strip {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            background: var(--border);
+            margin-top: 3rem
+        }
+
+        .sig-box {
+            background: var(--surface);
+            padding: 1.4rem 1rem;
+            transition: all .25s;
+            cursor: default
+        }
+
+        .sig-box:hover {
+            background: rgba(0, 245, 255, 0.04)
+        }
+
+        .sig-code {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.56rem;
+            color: var(--cyan);
+            letter-spacing: 0.12em;
+            margin-bottom: 0.5rem
+        }
+
+        .sig-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem
+        }
+
+        .sig-blurb {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--muted2);
+            line-height: 1.6
+        }
+
+        .score-chips {
+            display: flex;
+            gap: 3px;
+            margin-top: 0.7rem
+        }
+
+        .chip {
+            width: 14px;
+            height: 5px;
+            background: var(--cyan);
+            opacity: 0.85
+        }
+
+        .chip.empty {
+            background: var(--border);
+            opacity: 1
+        }
+
+        /* ── EMAIL PROOF ── */
+        .email-proof-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem
+        }
+
+        .ep-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: border-color .3s
+        }
+
+        .ep-card:hover {
+            border-color: rgba(0, 245, 255, 0.22)
+        }
+
+        .ep-bar {
+            background: rgba(0, 245, 255, 0.05);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .ep-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            color: var(--muted)
+        }
+
+        .ep-day {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            color: var(--cyan);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            padding: 0.12rem 0.45rem
+        }
+
+        .ep-subject {
+            padding: 0.8rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-style: italic
+        }
+
+        .ep-body {
+            padding: 1.1rem 1.2rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.64rem;
+            color: var(--muted2);
+            line-height: 1.85;
+            white-space: pre-line
+        }
+
+        .ep-sig {
+            color: var(--cyan);
+            display: block;
+            margin-top: 0.5rem;
+            font-weight: 700
+        }
+
+        .ep-label {
+            margin-top: 0.75rem;
+            font-size: 0.58rem;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 0.65rem;
+            font-style: italic
+        }
+
+        .ep-label strong {
+            color: var(--white)
+        }
+
+        /* ── RESULTS ── */
+        .results-bg {
+            background: linear-gradient(135deg, #070812 0%, #0c0720 50%, #08080e 100%);
+            position: relative;
+            overflow: hidden
+        }
+
+        .results-bg::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(124, 58, 255, 0.1), transparent 70%);
+            pointer-events: none
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center
+        }
+
+        .big-result-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border)
+        }
+
+        .rb-box {
+            background: rgba(10, 11, 20, 0.9);
+            padding: 2.2rem 1.8rem;
+            position: relative;
+            transition: background .3s
+        }
+
+        .rb-box:hover {
+            background: rgba(0, 245, 255, 0.04)
+        }
+
+        .rb-box::before,
+        .rb-box::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px
+        }
+
+        .rb-box::before {
+            top: -1px;
+            left: -1px;
+            border-top: 1px solid rgba(0, 245, 255, 0.4);
+            border-left: 1px solid rgba(0, 245, 255, 0.4)
+        }
+
+        .rb-box::after {
+            bottom: -1px;
+            right: -1px;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.4);
+            border-right: 1px solid rgba(0, 245, 255, 0.4)
+        }
+
+        .rb-num {
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, var(--cyan) 0%, #a080ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .rb-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            letter-spacing: 0.13em;
+            color: var(--muted);
+            margin-top: 0.4rem
+        }
+
+        .rb-delta {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--green);
+            margin-top: 0.45rem
+        }
+
+        .results-narrative p {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--muted2);
+            line-height: 1.9;
+            margin-bottom: 1rem
+        }
+
+        .quote-block {
+            margin-top: 2.5rem;
+            border-left: 2px solid var(--cyan);
+            padding-left: 1.5rem
+        }
+
+        .quote-block blockquote {
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--white);
+            line-height: 1.75;
+            margin-bottom: 0.6rem
+        }
+
+        .quote-block cite {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--muted);
+            display: block
+        }
+
+        /* ── COMPARE ── */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            margin-top: 5rem
+        }
+
+        .cg-col {
+            background: var(--card);
+            padding: 2.5rem 2rem
+        }
+
+        .cg-col.before {
+            border-top: 3px solid var(--hot)
+        }
+
+        .cg-col.after {
+            border-top: 3px solid var(--green)
+        }
+
+        .cg-head {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            margin-bottom: 1.5rem
+        }
+
+        .cg-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.22rem 0.7rem;
+            border: 1px solid
+        }
+
+        .cg-col.before .cg-badge {
+            color: var(--hot);
+            border-color: var(--hot);
+            background: rgba(255, 79, 79, 0.1)
+        }
+
+        .cg-col.after .cg-badge {
+            color: var(--green);
+            border-color: var(--green);
+            background: rgba(0, 255, 136, 0.07)
+        }
+
+        .cg-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: .5rem
+        }
+
+        .cg-list li {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted2);
+            padding: .6rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: .7rem;
+            line-height: 1.6
+        }
+
+        .cg-list li::before {
+            flex-shrink: 0;
+            margin-top: 0.12rem;
+            font-size: 0.75rem
+        }
+
+        .cg-col.before .cg-list li::before {
+            content: '✕';
+            color: var(--hot)
+        }
+
+        .cg-col.after .cg-list li::before {
+            content: '✓';
+            color: var(--green)
+        }
+
+        /* ── CLIENT QUOTE CARD ── */
+        .quote-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            position: relative;
+            max-width: 820px;
+            margin: 4rem auto 0
+        }
+
+        .quote-card::before,
+        .quote-card::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px
+        }
+
+        .quote-card::before {
+            top: -1px;
+            left: -1px;
+            border-top: 2px solid var(--cyan);
+            border-left: 2px solid var(--cyan)
+        }
+
+        .quote-card::after {
+            bottom: -1px;
+            right: -1px;
+            border-bottom: 2px solid var(--cyan);
+            border-right: 2px solid var(--cyan)
+        }
+
+        .qc-text {
+            font-size: 1.05rem;
+            font-style: italic;
+            color: var(--white);
+            line-height: 1.75;
+            margin-bottom: 1.2rem
+        }
+
+        .qc-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem
+        }
+
+        .qc-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyan), var(--violet));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.7rem;
+            color: #000;
+            flex-shrink: 0
+        }
+
+        .qc-name {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--white);
+            font-weight: 700
+        }
+
+        .qc-role {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            color: var(--muted)
+        }
+
+        /* ── CTA SECTION ── */
+        .cta-block {
+            padding: 8rem 3rem;
+            text-align: center;
+            position: relative;
+            z-index: 1
+        }
+
+        .cta-glow {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(0, 245, 255, 0.06), transparent 70%);
+            pointer-events: none
+        }
+
+        .cta-eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--cyan);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem
+        }
+
+        .cta-title {
+            font-size: clamp(2.5rem, 5vw, 5rem);
+            font-weight: 700;
+            letter-spacing: -0.035em;
+            line-height: 1.08;
+            margin-bottom: 1.4rem
+        }
+
+        .cta-title span {
+            background: linear-gradient(90deg, var(--cyan), var(--violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .cta-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.76rem;
+            color: var(--muted2);
+            max-width: 480px;
+            margin: 0 auto 3rem;
+            line-height: 1.9
+        }
+
+        .btn-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap
+        }
+
+        .btn-primary {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.73rem;
+            font-weight: 700;
+            background: var(--cyan);
+            color: #000;
+            border: none;
+            padding: 0.9rem 2.2rem;
+            cursor: pointer;
+            letter-spacing: 0.08em;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            text-decoration: none
+        }
+
+        .btn-primary:hover {
+            background: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 36px rgba(0, 245, 255, 0.22)
+        }
+
+        .btn-ghost {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted2);
+            padding: 0.9rem 2.2rem;
+            cursor: pointer;
+            letter-spacing: 0.06em;
+            transition: all .2s;
+            position: relative;
+            text-decoration: none;
+            display: inline-block
+        }
+
+        .btn-ghost::before,
+        .btn-ghost::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            transition: all .3s
+        }
+
+        .btn-ghost::before {
+            top: -1px;
+            left: -1px;
+            border-top: 1px solid var(--cyan);
+            border-left: 1px solid var(--cyan)
+        }
+
+        .btn-ghost::after {
+            bottom: -1px;
+            right: -1px;
+            border-bottom: 1px solid var(--cyan);
+            border-right: 1px solid var(--cyan)
+        }
+
+        .btn-ghost:hover {
+            border-color: transparent;
+            color: var(--white)
+        }
+
+        /* ── FOOTER ── */
+        .cs-footer {
+            padding: 1.5rem 3rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1
+        }
+
+        .ft-brand {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--muted)
+        }
+
+        .ft-brand strong {
+            color: var(--cyan)
+        }
+
+        .ft-note {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.55rem;
+            color: rgba(94, 101, 119, 0.5)
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:900px) {
+
+            .split-grid,
+            .results-grid,
+            .email-proof-grid,
+            .compare-grid {
+                grid-template-columns: 1fr
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .big-result-board {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .signal-strip {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .cs-section,
+            .hero-banner,
+            .cta-block {
+                padding: 5rem 1.5rem
+            }
+
+            .cs-footer {
+                flex-direction: column;
+                gap: .6rem;
+                text-align: center
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="prog"></div>
+
+    <!-- ═══════════════════════════════════════════════
+     HERO BANNER — stat-forward opener
+═══════════════════════════════════════════════ -->
+    <section class="hero-banner">
+        <canvas id="heroBg"
+            style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none"></canvas>
+        <div class="hero-banner-inner" style="position:relative;z-index:2">
+            <div class="hb-eyebrow r">
+                <span class="hb-pill">Case Study</span>
+                <span class="hb-sep"></span>
+                <span class="hb-tag">AdRadar × SkillPrax · 2026</span>
+                <span class="hb-sep"></span>
+                <a href="https://skillprax.com" target="_blank" rel="noopener"
+                    style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;opacity:0.7;transition:opacity .2s"
+                    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">↗ skillprax.com</a>
+            </div>
+            <h1 class="hb-title r d1">
+                How AdRadar helped<br />
+                <span class="light">SkillPrax book</span><br />
+                <span class="accent">4 qualified meetings</span><br />
+                <span class="light">every single week.</span>
+            </h1>
+            <p class="hb-sub r d2">A fractional paid media consultancy with zero outbound pipeline — transformed into a
+                predictable, automated meeting machine using AdRadar's AI-driven lead intelligence system.</p>
+            <div class="stat-grid r d3">
+                <div class="sg-box">
+                    <div class="sg-num" data-count="4" data-suffix="×">0×</div>
+                    <div class="sg-label">Qualified Meetings / Week</div>
+                    <div class="sg-delta">↑ from 0</div>
+                </div>
+                <div class="sg-box">
+                    <div class="sg-num" data-count="0" data-suffix="h">3h</div>
+                    <div class="sg-label">Daily Research Time</div>
+                    <div class="sg-delta">↓ from 3–4 hrs</div>
+                </div>
+                <div class="sg-box">
+                    <div class="sg-num" data-count="48" data-suffix="h">0h</div>
+                    <div class="sg-label">Setup → First Lead</div>
+                    <div class="sg-delta">Fully operational</div>
+                </div>
+                <div class="sg-box">
+                    <div class="sg-num">£350K</div>
+                    <div class="sg-label">Ad Spend Identified</div>
+                    <div class="sg-delta">5 brands · 1 report</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════
+     THE CHALLENGE
+═══════════════════════════════════════════════ -->
+    <section class="cs-section challenge-bg">
+        <div class="cs-section-inner">
+            <div class="split-grid">
+                <div class="r">
+                    <p class="s-label">01 · The Challenge</p>
+                    <h2 class="s-title">Great at the work.<br /><em>Terrible at finding it.</em></h2>
+                    <div class="prose">
+                        <p>SkillPrax had the skills, the track record, and a clear offer. But generating a consistent
+                            pipeline of <strong>high-intent, decision-ready prospects</strong> was a full-time job
+                            layered on top of client delivery.</p>
+                        <p>Manual prospecting meant scrolling Meta Ad Library for hours, researching companies with no
+                            signal on whether they actually needed help — then sending generic outreach into the void.
+                        </p>
+                        <p>The result? <strong class="hl">Zero qualified meetings. Zero predictable pipeline.</strong>
+                            Revenue entirely dependent on referrals and luck.</p>
+                        <p>What they needed was a system that surfaced brands at the exact moment they were in pain —
+                            and wrote the outreach to match, automatically.</p>
+                    </div>
+                </div>
+                <div class="r d2">
+                    <div class="pain-list">
+                        <div class="pain-item">
+                            <div class="pi-icon">✕</div>
+                            <div class="pi-title">3–4 hours of manual research daily</div>
+                            <div class="pi-text">Scrolling the Meta Ad Library by hand. No scoring. No prioritisation.
+                                Pure guesswork on who to contact.</div>
+                        </div>
+                        <div class="pain-item">
+                            <div class="pi-icon">✕</div>
+                            <div class="pi-title">No signal = no urgency in outreach</div>
+                            <div class="pi-text">Reaching out to brands with no idea if they're bleeding spend. Generic
+                                emails get ignored in under 2 seconds.</div>
+                        </div>
+                        <div class="pain-item">
+                            <div class="pi-icon">✕</div>
+                            <div class="pi-title">0 qualified meetings per week</div>
+                            <div class="pi-text">Weeks of effort. Zero booked calls with decision-ready prospects.
+                                Revenue relied entirely on word-of-mouth.</div>
+                        </div>
+                        <div class="pain-item">
+                            <div class="pi-icon">✕</div>
+                            <div class="pi-title">No pipeline visibility</div>
+                            <div class="pi-text">No way to predict next month's revenue. Growth stalled. The prospecting
+                                bottleneck was the biggest constraint.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════
+     THE SOLUTION — 7-step pipeline
+═══════════════════════════════════════════════ -->
+    <section class="cs-section">
+        <div class="cs-section-inner">
+            <p class="s-label r">02 · The Solution</p>
+            <h2 class="s-title r">AdRadar deployed <em>for SkillPrax.</em></h2>
+            <p class="r"
+                style="font-family:'Space Mono',monospace;font-size:0.76rem;color:var(--muted2);max-width:600px;line-height:1.9">
+                An autonomous 7-step intelligence pipeline running at 6 AM every morning — delivering pre-scored,
+                pre-enriched, pre-written prospect reports directly into SkillPrax's inbox before the first meeting of
+                the day.</p>
+            <div class="process-track">
+                <div class="pt-step r">
+                    <div class="pt-num">01</div>
+                    <div class="pt-content">
+                        <div class="pt-title">Scrape</div>
+                        <div class="pt-desc">Scans Meta Ad Library daily for UK eCommerce brands actively running ads.
+                            Captures ad count, creative age, and spend signals in real time — then identifies
+                            underperforming campaigns using 5 live signals.</div>
+                        <span class="pt-tool">Meta Ad Library API</span>
+                    </div>
+                </div>
+                <div class="pt-step r d1">
+                    <div class="pt-num">02</div>
+                    <div class="pt-content">
+                        <div class="pt-title">Filter</div>
+                        <div class="pt-desc">Removes brands running under 30 days (not yet fatigued) and eliminates
+                            enterprise accounts outside SkillPrax's target range. Only qualified signals survive.</div>
+                        <span class="pt-tool">Smart Filter Engine</span>
+                    </div>
+                </div>
+                <div class="pt-step r d2">
+                    <div class="pt-num">03</div>
+                    <div class="pt-content">
+                        <div class="pt-title">Enrich</div>
+                        <div class="pt-desc">Finds founder name, verified email, LinkedIn profile, employee count, and
+                            funding status. No cold outreach to gatekeepers — straight to the decision maker.</div>
+                        <span class="pt-tool">Apollo.io</span>
+                    </div>
+                </div>
+                <div class="pt-step r d1">
+                    <div class="pt-num">04</div>
+                    <div class="pt-content">
+                        <div class="pt-title">Traffic Analysis</div>
+                        <div class="pt-desc">Pulls paid traffic dependency % and monthly visit volume. Brands at 60%+
+                            paid dependency are desperate — ads stop and revenue collapses. Maximum urgency.</div>
+                        <span class="pt-tool">Similarweb</span>
+                    </div>
+                </div>
+                <div class="pt-step r d2">
+                    <div class="pt-num">05</div>
+                    <div class="pt-content">
+                        <div class="pt-title">Score (5 Signals)</div>
+                        <div class="pt-desc">Runs every brand against 5 live signals: Creative Fatigue, Desperation
+                            Testing, Copy Quality, Paid Dependency, Team Size. Outputs HOT / WARM / COLD tier instantly.
+                        </div>
+                        <span class="pt-tool">AI Scoring Engine</span>
+                    </div>
+                </div>
+                <div class="pt-step r d1">
+                    <div class="pt-num">06</div>
+                    <div class="pt-content">
+                        <div class="pt-title">Write</div>
+                        <div class="pt-desc">Generates 3 hyper-personalised emails per HOT lead — each referencing the
+                            brand's exact ad weakness. Not templates. Not generic. Specific, verifiable, converting.
+                        </div>
+                        <span class="pt-tool">Gemini AI</span>
+                    </div>
+                </div>
+                <div class="pt-step r d2">
+                    <div class="pt-num">07</div>
+                    <div class="pt-content">
+                        <div class="pt-title">Export + Launch</div>
+                        <div class="pt-desc">Pushes everything to Google Sheets + Airtable. Loads HOT leads into
+                            Instantly.ai campaign. Fires Slack notification with daily summary before 7 AM.</div>
+                        <span class="pt-tool">Instantly.ai · Slack · Sheets</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scoring Signals -->
+            <p class="s-label r" style="margin-top:4.5rem">Scoring Signals</p>
+            <div class="signal-strip r">
+                <div class="sig-box">
+                    <div class="sig-code">S1</div>
+                    <div class="sig-name">Creative Fatigue</div>
+                    <div class="sig-blurb">60+ days same ad = CPMs rising, CTR falling, frequency burnout. HOT signal.
+                    </div>
+                    <div class="score-chips">
+                        <div class="chip"></div>
+                        <div class="chip"></div>
+                        <div class="chip empty"></div>
+                    </div>
+                </div>
+                <div class="sig-box">
+                    <div class="sig-code">S2</div>
+                    <div class="sig-name">Desperation Testing</div>
+                    <div class="sig-blurb">10+ simultaneous ads = no clear winner, account chaos, wasted spend at scale.
+                    </div>
+                    <div class="score-chips">
+                        <div class="chip"></div>
+                        <div class="chip"></div>
+                        <div class="chip empty"></div>
+                    </div>
+                </div>
+                <div class="sig-box">
+                    <div class="sig-code">S3</div>
+                    <div class="sig-name">Copy Quality</div>
+                    <div class="sig-blurb">Generic copy = poor conversion regardless of budget. No urgency, no proof.
+                    </div>
+                    <div class="score-chips">
+                        <div class="chip"></div>
+                        <div class="chip empty"></div>
+                        <div class="chip empty"></div>
+                    </div>
+                </div>
+                <div class="sig-box">
+                    <div class="sig-code">S4</div>
+                    <div class="sig-name">Paid Dependency</div>
+                    <div class="sig-blurb">60%+ paid traffic share = brand dies if ads stop. Maximum urgency to fix
+                        ROAS.</div>
+                    <div class="score-chips">
+                        <div class="chip"></div>
+                        <div class="chip"></div>
+                        <div class="chip"></div>
+                    </div>
+                </div>
+                <div class="sig-box">
+                    <div class="sig-code">S5</div>
+                    <div class="sig-name">Team Size Risk</div>
+                    <div class="sig-blurb">Under 50 staff = no dedicated in-house media buyer. Founder is the decision
+                        maker.</div>
+                    <div class="score-chips">
+                        <div class="chip"></div>
+                        <div class="chip empty"></div>
+                        <div class="chip empty"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════
+     EMAIL PROOF
+═══════════════════════════════════════════════ -->
+    <section class="cs-section" style="background:var(--surface)">
+        <div class="cs-section-inner">
+            <p class="s-label r">03 · Outreach That Converts</p>
+            <h2 class="s-title r">Every email references <em>their exact pain.</em></h2>
+            <p class="r"
+                style="font-family:'Space Mono',monospace;font-size:0.74rem;color:var(--muted2);max-width:580px;line-height:1.9">
+                AdRadar doesn't send templates. It generates outreach that opens with a specific observation about each
+                brand's live ad account — creating instant credibility and urgency on the first line.</p>
+            <div class="email-proof-grid">
+                <div class="ep-card r d1">
+                    <div class="ep-bar">
+                        <span class="ep-meta">To: Melissa Rothbaum · Fable &amp; Mane</span>
+                        <span class="ep-day">Day 1</span>
+                    </div>
+                    <div class="ep-subject">Fable and Mane — something I noticed in your Meta ads</div>
+                    <div class="ep-body">Hi Melissa,
+
+                        I was looking at Fable &amp; Mane's Meta ad library today.
+
+                        45 active ads running simultaneously — some since November.
+
+                        That usually means one thing: the account hasn't found its winning creative yet and is testing
+                        at scale hoping something sticks.
+
+                        I help haircare brands in exactly this position consolidate their Meta accounts around one clear
+                        performance angle — usually cuts wasted spend by 30–40% in the first month.
+
+                        Worth a 15-minute call?
+
+                        <span class="ep-sig">Shahool · Founder &amp; CEO, SkillPrax</span>
+                    </div>
+                    <div class="ep-label">Opens with: <strong>their exact ad count + days running.</strong> Not a
+                        template. Verifiable in 30 seconds.</div>
+                </div>
+                <div class="ep-card r d2">
+                    <div class="ep-bar">
+                        <span class="ep-meta">To: [Name] · Gym King</span>
+                        <span class="ep-day">Day 1</span>
+                    </div>
+                    <div class="ep-subject">Gym King — your 35,000 reviews aren't in your ads</div>
+                    <div class="ep-body">Hi [Name],
+
+                        I was looking at Gym King's Meta ad library today.
+
+                        100 active ads since September — and the creative says 'Discover Gym King' with no clear offer
+                        or hook.
+
+                        You have 35,000 five-star reviews sitting unused in your ad account. That's one of the strongest
+                        performance creative angles in activewear — and it's not being used.
+
+                        I help Manchester fashion brands turn social proof into Meta ads that actually convert.
+
+                        Worth a 15-minute call?
+
+                        <span class="ep-sig">Shahool · Founder &amp; CEO, SkillPrax</span>
+                    </div>
+                    <div class="ep-label">Opens with: <strong>specific unused asset (35k reviews) + missed
+                            opportunity.</strong> Personalised by AdRadar AI in seconds.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════
+     THE RESULTS
+═══════════════════════════════════════════════ -->
+    <section class="cs-section results-bg" id="results">
+        <div class="cs-section-inner">
+            <div class="results-grid">
+                <div class="results-narrative r">
+                    <p class="s-label">04 · The Results</p>
+                    <h2 class="s-title">From 0 to <span style="color:var(--cyan)">4 qualified<br />meetings</span> every
+                        week.</h2>
+                    <p>Within 48 hours of AdRadar going live, SkillPrax received their first batch of pre-scored,
+                        pre-enriched, pre-written leads. Every email referenced something verifiable about the
+                        prospect's live ad account.</p>
+                    <p>Reply rates went from near-zero to consistent. Meetings went from "occasional referral" to a
+                        predictable calendar of 4 qualified prospects every week — each already identified as
+                        high-urgency before first contact.</p>
+                    <p>SkillPrax now wakes up to a daily intelligence report. <strong style="color:var(--white)">No
+                            prospecting. No research. No guesswork.</strong> Just show up, close, and do the work.</p>
+                    <div class="quote-block">
+                        <blockquote>"The system doesn't just find leads — it finds the right leads at the exact moment
+                            they're in pain. Every email I send references something specific about their account.
+                            That's why it converts."</blockquote>
+                        <cite>— Shahool, Founder &amp; CEO · SkillPrax</cite>
+                    </div>
+                </div>
+                <div class="big-result-board r d2">
+                    <div class="rb-box">
+                        <div class="rb-num">4×</div>
+                        <div class="rb-label">Meetings / Week</div>
+                        <div class="rb-delta">↑ from 0</div>
+                    </div>
+                    <div class="rb-box">
+                        <div class="rb-num">0h</div>
+                        <div class="rb-label">Daily Research Time</div>
+                        <div class="rb-delta">↓ from 3–4 hrs</div>
+                    </div>
+                    <div class="rb-box">
+                        <div class="rb-num">48h</div>
+                        <div class="rb-label">Setup to First Lead</div>
+                        <div class="rb-delta">Fully operational</div>
+                    </div>
+                    <div class="rb-box">
+                        <div class="rb-num">£350K</div>
+                        <div class="rb-label">Monthly Spend Found</div>
+                        <div class="rb-delta">5 brands · 1 report</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Before / After -->
+            <div class="compare-grid r">
+                <div class="cg-col before">
+                    <div class="cg-head"><span class="cg-badge">Before AdRadar</span></div>
+                    <ul class="cg-list">
+                        <li>3–4 hours of manual prospecting every day</li>
+                        <li>No signal on whether prospects actually needed help</li>
+                        <li>Generic outreach with near-zero reply rate</li>
+                        <li>0 qualified meetings booked per week</li>
+                        <li>Revenue entirely dependent on referrals</li>
+                        <li>No visibility into pipeline or next month's revenue</li>
+                    </ul>
+                </div>
+                <div class="cg-col after">
+                    <div class="cg-head"><span class="cg-badge">After AdRadar</span></div>
+                    <ul class="cg-list">
+                        <li>0 hours manual research — report in inbox by 6 AM</li>
+                        <li>Every prospect scored against 5 live urgency signals</li>
+                        <li>Personalised outreach referencing their exact ad weakness</li>
+                        <li>4 qualified meetings booked every single week</li>
+                        <li>Predictable, outbound-driven pipeline</li>
+                        <li>Full visibility: HOT / WARM / COLD lead tiers daily</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════
+     TESTIMONIAL QUOTE CARD
+═══════════════════════════════════════════════ -->
+    <section class="cs-section" style="background:var(--surface)">
+        <div class="cs-section-inner">
+            <p class="s-label r" style="text-align:center">05 · In Their Own Words</p>
+            <div class="quote-card r d1">
+                <div class="qc-text">"Before AdRadar, our outbound was generic — scraping leads, sending the same email,
+                    hoping something stuck. Honestly, the response rate was inconsistent at best. What Kishore built is
+                    different. The system identifies companies already spending on ads but whose campaigns are clearly
+                    underperforming, finds the right decision makers, and sends highly personalised outreach. Within the
+                    first couple of weeks, we were talking to companies that already had a real problem we could solve.
+                    It makes the whole prospecting process a lot smarter."</div>
+                <div class="qc-author">
+                    <div class="qc-dot">S</div>
+                    <div>
+                        <div class="qc-name">Shahool</div>
+                        <div class="qc-role">Founder &amp; CEO · SkillPrax</div>
+                    </div>
+                    <div style="margin-left:auto">
+                        <a href="https://skillprax.com" target="_blank" rel="noopener"
+                            style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;letter-spacing:0.1em;opacity:0.8;transition:opacity .2s"
+                            onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">↗
+                            skillprax.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════
+     CTA
+═══════════════════════════════════════════════ -->
+    <section class="cta-block">
+        <div class="cta-glow"></div>
+        <p class="cta-eyebrow r">// AdRadar · Start Today</p>
+        <h2 class="cta-title r d1">Want the same<br /><span>results for your agency?</span></h2>
+        <p class="cta-sub r d2">AdRadar delivers 20–50 pre-scored, pre-enriched, outreach-ready prospects every morning.
+            At £3K–£8K/mo per client — one new client pays for 2 years of the system on autopilot.</p>
+        <div class="btn-row r d3">
+            <a href="https://cal.com/kishore-clickfieldai/30min" target="_blank" rel="noopener" class="btn-primary">Book
+                a Demo Call →</a>
+            <a href="https://cal.com/kishore-clickfieldai/30min" target="_blank" rel="noopener" class="btn-ghost">// See
+                How It Works</a>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════ -->
+    <footer class="cs-footer">
+        <div class="ft-brand"><strong>ADRADAR</strong> · Priority Lead Intelligence · powered by ClickFieldAI · 2026
+        </div>
+        <div style="display:flex;align-items:center;gap:1.5rem">
+            <a href="https://skillprax.com" target="_blank" rel="noopener"
+                style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;letter-spacing:0.1em;opacity:0.8;transition:opacity .2s"
+                onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">↗ skillprax.com</a>
+            <div class="ft-note">Case Study · SkillPrax · All data verified via Meta Ad Library, Similarweb &amp; Apollo
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ── SCROLL PROGRESS ── */
+        window.addEventListener('scroll', () => {
+            const p = document.getElementById('prog');
+            const pct = (scrollY / (document.body.scrollHeight - innerHeight)) * 100;
+            p.style.width = Math.min(pct, 100) + '%';
+        });
+
+        /* ── SCROLL REVEAL ── */
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('v') });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.r').forEach(el => obs.observe(el));
+
+        /* ── ANIMATED COUNT-UP ── */
+        function animateCount(el, target, suffix, duration = 1200) {
+            const start = performance.now();
+            const from = parseInt(el.textContent) || 0;
+            function step(now) {
+                const t = Math.min((now - start) / duration, 1);
+                const ease = 1 - Math.pow(1 - t, 3);
+                el.textContent = Math.round(from + (target - from) * ease) + suffix;
+                if (t < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+        const countObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const el = e.target;
+                    const target = parseInt(el.dataset.count);
+                    const suffix = el.dataset.suffix || '';
+                    if (!isNaN(target)) { animateCount(el, target, suffix); }
+                    countObs.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('[data-count]').forEach(el => countObs.observe(el));
+
+        /* ── HERO CANVAS PARTICLE STREAM ── */
+        (function () {
+            const c = document.getElementById('heroBg');
+            const ctx = c.getContext('2d');
+            let W, H, particles = [], streams = [];
+            function resize() { W = c.width = c.offsetWidth; H = c.height = c.offsetHeight; }
+            resize();
+            window.addEventListener('resize', () => { resize(); init(); });
+            const COLORS = ['rgba(0,245,255', 'rgba(124,58,255', 'rgba(240,42,252', 'rgba(200,220,255'];
+            class P {
+                reset() {
+                    const angle = Math.random() * Math.PI * 2;
+                    const r = Math.random() * Math.min(W, H) * 0.4;
+                    this.x = W * 0.5 + Math.cos(angle) * r;
+                    this.y = H * 0.5 + Math.sin(angle) * r;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.life = 0; this.maxLife = 100 + Math.random() * 180;
+                    this.r = Math.random() * 1.1 + 0.2;
+                    this.col = COLORS[Math.floor(Math.random() * COLORS.length)];
+                }
+                constructor() { this.reset(); this.life = Math.random() * this.maxLife; }
+                tick() {
+                    this.x += this.vx; this.y += this.vy;
+                    this.vx += (Math.random() - 0.5) * 0.04;
+                    this.vy += (Math.random() - 0.5) * 0.04;
+                    this.life++; if (this.life > this.maxLife) this.reset();
+                }
+                draw() {
+                    const a = Math.sin(this.life / this.maxLife * Math.PI) * 0.65;
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `${this.col},${a})`; ctx.fill();
+                }
+            }
+            class S {
+                reset() {
+                    const angle = Math.random() * Math.PI * 2;
+                    const d = 30 + Math.random() * Math.min(W, H) * 0.38;
+                    this.x1 = W * 0.5 + Math.cos(angle) * d * 0.15;
+                    this.y1 = H * 0.5 + Math.sin(angle) * d * 0.15;
+                    this.x2 = W * 0.5 + Math.cos(angle) * d;
+                    this.y2 = H * 0.5 + Math.sin(angle) * d;
+                    this.p = Math.random(); this.sp = 0.003 + Math.random() * 0.005;
+                    this.col = COLORS[Math.floor(Math.random() * COLORS.length)];
+                    this.w = Math.random() * 0.7 + 0.15;
+                }
+                constructor() { this.reset(); }
+                tick() { this.p += this.sp; if (this.p > 1) this.reset(); }
+                draw() {
+                    const lp = Math.max(0, this.p - 0.12);
+                    const a = Math.sin(this.p * Math.PI) * 0.55;
+                    ctx.beginPath();
+                    ctx.moveTo(this.x1 + (this.x2 - this.x1) * lp, this.y1 + (this.y2 - this.y1) * lp);
+                    ctx.lineTo(this.x1 + (this.x2 - this.x1) * this.p, this.y1 + (this.y2 - this.y1) * this.p);
+                    ctx.strokeStyle = `${this.col},${a})`; ctx.lineWidth = this.w; ctx.stroke();
+                }
+            }
+            function init() {
+                particles = Array.from({ length: 180 }, () => new P());
+                streams = Array.from({ length: 130 }, () => new S());
+            }
+            init();
+            function drawCore() {
+                const cx = W * 0.5, cy = H * 0.5;
+                [[200, 0.05, 'rgba(0,245,255'], [130, 0.08, 'rgba(124,58,255'], [60, 0.18, 'rgba(0,245,255'], [20, 0.32, 'rgba(200,240,255']].forEach(([r, a, col]) => {
+                    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+                    g.addColorStop(0, `${col},${a})`); g.addColorStop(1, `${col},0)`);
+                    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+                });
+                ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(220,255,255,0.85)'; ctx.fill();
+            }
+            function loop() {
+                ctx.fillStyle = 'rgba(7,8,12,0.15)'; ctx.fillRect(0, 0, W, H);
+                streams.forEach(s => { s.tick(); s.draw(); });
+                particles.forEach(p => { p.tick(); p.draw(); });
+                drawCore();
+                requestAnimationFrame(loop);
+            }
+            loop();
+        })();
+    </script>
+</body>
+
+</html>

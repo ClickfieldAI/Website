@@ -1,0 +1,268 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-black: #000000;
+  --color-brand-dark: #0a0a0a;
+  --color-brand-gray: #1a1a1a;
+  --color-brand-light: #ffffff;
+  --color-brand-muted: #888888;
+  --color-brand-cyan: #00f0ff;
+  --color-brand-blue: #0055ff;
+
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--color-brand-black)] text-[var(--color-brand-light)] font-sans antialiased m-0 p-0 overflow-x-hidden;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-brand-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand-gray);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-muted);
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(26, 26, 26, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Liquid Metal Button Glow Effect */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg at 50% 50%,
+      transparent 0deg,
+      rgba(255, 255, 255, 0.1) 60deg,
+      rgba(255, 255, 255, 0.8) 180deg,
+      rgba(255, 255, 255, 0.1) 300deg,
+      transparent 360deg);
+  animation: spin 4s linear infinite;
+  z-index: 0;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.btn-glow:hover::before {
+  opacity: 1;
+}
+
+.btn-glow::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  /* Inner radius to hide center of gradient */
+  background: #000;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.btn-glow-content {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(180deg, #fff 0%, #aaa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Highlight at the top of the button */
+.btn-glow-highlight {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  z-index: 3;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Fluid Blob Backgrounds */
+.blob-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: float 20s ease-in-out infinite alternate;
+}
+
+.blob-1 {
+  top: -10%;
+  left: 20%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, var(--color-brand-cyan) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+
+.blob-2 {
+  top: 40%;
+  right: -10%;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, var(--color-brand-blue) 0%, transparent 70%);
+  animation-delay: -5s;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(5%, 10%) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-5%, 5%) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0, -10%) scale(1);
+  }
+}
+
+/* Text Gradients */
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Continuous Marquee Flow */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-left 40s linear infinite;
+  display: flex !important;
+  width: max-content;
+}
+
+.animate-marquee.reverse {
+  animation-name: marquee-right;
+  animation-duration: 60s;
+  /* Slower, off-sync reverse */
+}
+
+.animate-marquee.slow {
+  animation-duration: 80s;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Fluid Smoke Morphing */
+@keyframes smoke-morph-1 {
+  0% {
+    transform: scale(1.2) rotate(0deg) translate(0%, 0%);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    opacity: 0.1;
+  }
+
+  50% {
+    transform: scale(1.5) rotate(10deg) translate(-5%, 5%);
+    border-radius: 60% 40% 30% 70% / 60% 40% 50% 40%;
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1.2) rotate(0deg) translate(0%, 0%);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    opacity: 0.1;
+  }
+}
+
+@keyframes smoke-morph-2 {
+  0% {
+    transform: scale(1.5) rotate(0deg) translate(0%, 0%);
+    border-radius: 50% 50% 30% 70% / 30% 70% 50% 50%;
+    opacity: 0.1;
+  }
+
+  50% {
+    transform: scale(1.2) rotate(-10deg) translate(5%, -5%);
+    border-radius: 30% 70% 50% 50% / 50% 40% 70% 30%;
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: scale(1.5) rotate(0deg) translate(0%, 0%);
+    border-radius: 50% 50% 30% 70% / 30% 70% 50% 50%;
+    opacity: 0.1;
+  }
+}
+
+.smoke-1 {
+  animation: smoke-morph-1 25s ease-in-out infinite;
+}
+
+.smoke-2 {
+  animation: smoke-morph-2 30s ease-in-out infinite;
+}
+
+.smoke-3 {
+  animation: smoke-morph-1 35s ease-in-out infinite reverse;
+}
