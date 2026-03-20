@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd clickfield-ai && npm install && npm run build",
+  "outputDirectory": "clickfield-ai/dist",
+  "installCommand": "cd clickfield-ai && npm install",
+  "framework": "vite"
+}
