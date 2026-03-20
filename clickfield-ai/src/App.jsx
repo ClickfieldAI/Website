@@ -3,6 +3,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Target, Zap, ShieldCheck, ChevronRight, Hash } from 'lucide-react';
 import Beams from './Beams';
+import { ShaderAnimation } from './components/ui/ShaderAnimation';
+import { FallingPattern } from './components/ui/FallingPattern';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -142,10 +144,7 @@ export default function App() {
       {/* Floating Header */}
       <header className="fixed top-6 left-0 right-0 z-[100] flex justify-center px-4 mix-blend-difference pointer-events-none">
         <nav ref={headerRef} className="glass-panel rounded-full px-6 py-3 flex items-center gap-8 shadow-2xl backdrop-blur-xl pointer-events-auto">
-          <div className="flex items-center gap-2 cursor-pointer">
-            <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
-              <Zap size={14} className="text-black" />
-            </div>
+          <div className="flex items-center cursor-pointer">
             <span className="font-display font-bold tracking-tight text-white whitespace-nowrap">CLICKFIELDAI</span>
           </div>
 
@@ -153,10 +152,6 @@ export default function App() {
             <a href="#platform" className="hover:text-white transition-colors">Platform</a>
             <a href="#case-studies" className="hover:text-white transition-colors">Case Studies</a>
             <a href="#customers" className="hover:text-white transition-colors">Customers</a>
-            <a href="/skillprax-case-study.html" target="_blank" rel="noopener noreferrer" className="hover:text-[#00f0ff] text-[#00f0ff]/70 transition-colors font-semibold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse inline-block"></span>
-              Customer Success
-            </a>
           </div>
 
           <a href="https://cal.com/kishore-clickfieldai/30min" target="_blank" rel="noopener noreferrer" className="hidden sm:flex text-sm font-semibold bg-white text-black px-5 py-2 rounded-full hover:bg-gray-200 transition-colors">
@@ -166,46 +161,51 @@ export default function App() {
       </header>
 
       {/* Hero Section */}
-      <main id="platform" ref={heroRef} className="relative z-10 min-h-screen flex flex-col items-center justify-center pt-32 px-4 text-center overflow-hidden">
+      <main id="platform" ref={heroRef} className="relative z-10 min-h-[85vh] flex flex-col justify-end pb-20 px-6 md:px-12 lg:px-24 overflow-hidden bg-black">
 
-        {/* Interactive Beams Background Layer  */}
-        <div
-          ref={heroWaveRef}
-          className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center will-change-transform opacity-70"
-          style={{ maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 80%)', WebkitMaskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 80%)' }}
-        >
-          <Beams
-            beamWidth={3}
-            beamHeight={30}
-            beamNumber={20}
-            lightColor="#00f0ff"
-            speed={1.5}
-            noiseIntensity={1.75}
-            scale={0.2}
-            rotation={30}
-          />
+        {/* Colorful Glow Blobs matching site theme */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen">
+          <div ref={fluidBlob1} className="blob blob-1 mix-blend-screen"></div>
+          <div ref={fluidBlob2} className="blob blob-2 mix-blend-screen"></div>
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
-          <h1 ref={heroTextRef} className="hero-anim text-5xl md:text-7xl lg:text-8xl font-display font-bold tracking-tighter leading-[1.05] mb-8 text-gradient drop-shadow-2xl will-change-transform">
-            Scale Revenue.<br />Zero Signal Loss.
+        {/* Cinematic Curtain Background */}
+        <div 
+          className="absolute top-0 left-0 w-full h-[65vh] flex overflow-hidden opacity-30 pointer-events-none" 
+          style={{ maskImage: 'linear-gradient(to bottom, #000000 0%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, #000000 0%, transparent 100%)' }}
+        >
+          {Array.from({ length: 40 }).map((_, i) => (
+            <div 
+              key={i} 
+              className="flex-1 h-full" 
+              style={{ background: 'linear-gradient(90deg, #111 0%, #aaa 50%, #111 100%)' }} 
+            />
+          ))}
+        </div>
+
+        {/* Main Content */}
+        <div className="relative z-10 w-full flex flex-col items-start mt-24">
+          <h1 
+            ref={heroTextRef} 
+            className="hero-anim text-[10vw] md:text-[6vw] lg:text-[5.5vw] font-sans font-bold tracking-tight leading-[1.05] mb-12 text-gradient drop-shadow-2xl will-change-transform flex flex-col"
+          >
+            <span className="mb-2 pb-2">The definitive AI infrastructure</span>
+            <span className="text-white/80 pb-4">for high-performing B2B teams.</span>
           </h1>
 
-          <p ref={heroSubtextRef} className="hero-anim text-lg md:text-xl text-[#888888] font-sans max-w-2xl mb-12 leading-relaxed will-change-transform">
-            We help high-growth B2B companies engineer highly scaled outbound infrastructure. Attack at volume without sacrificing deeply perceived 1:1 personalization.
-          </p>
-
-          <div className="hero-anim flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
-            {/* The Xlides style button */}
-            <a href="https://cal.com/kishore-clickfieldai/30min" target="_blank" rel="noopener noreferrer" className="btn-glow relative group h-14 px-8 rounded-full flex items-center justify-center bg-black transition-transform active:scale-[0.98]">
-              <span className="btn-glow-highlight"></span>
-              <span className="btn-glow-content font-sans font-semibold text-lg flex items-center gap-2">
-                Book Growth Mapping <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </span>
+          <div className="hero-anim flex items-center">
+            {/* Minimal Pill Button */}
+            <a 
+              href="https://cal.com/kishore-clickfieldai/30min" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="group flex items-center gap-4 bg-white hover:bg-white/90 transition-colors text-black rounded-full pl-6 pr-1.5 py-1.5 border border-white/20"
+            >
+              <span className="font-sans font-medium text-sm tracking-wide">Let's talk</span>
+              <div className="flex items-center justify-center bg-black text-white rounded-full w-8 h-8 group-hover:translate-x-1 transition-transform">
+                <ChevronRight size={16} strokeWidth={2.5} />
+              </div>
             </a>
-            <button className="h-14 px-8 rounded-full flex items-center justify-center font-sans font-medium text-white hover:bg-white/5 transition-colors">
-              Explore Architecture
-            </button>
           </div>
         </div>
       </main>
@@ -268,33 +268,28 @@ export default function App() {
           {[1, 2].map((loop) => (
             <div key={loop} className="flex gap-8 shrink-0 px-4 items-center">
 
-              {/* SkillPrax Real Case Study Card */}
+              {/* AdRadar Case Study */}
               <div className="w-[85vw] md:w-[45vw] xl:w-[32vw] h-[65vh] shrink-0 glass-panel p-10 lg:p-14 rounded-[2.5rem] flex flex-col justify-between group hover:border-[#00f0ff]/70 transition-all duration-500 overflow-hidden relative border-[#00f0ff]/30">
-                {/* Animated dot-grid bg */}
-                <div className="absolute inset-0 rounded-[2.5rem] opacity-[0.04] group-hover:opacity-[0.09] transition-opacity duration-500 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #00f0ff 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
-                {/* Top glow line */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00f0ff]/60 to-transparent rounded-t-[2.5rem]" />
-                {/* Cyan corner glow */}
-                <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-gradient-to-br from-[#00f0ff]/20 to-transparent rounded-full blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
+                {/* Background Image Layer */}
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Data Analytics Visualization" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none"></div>
 
                 <div className="relative z-10 flex flex-col h-full">
-                  {/* Badge row */}
                   <div className="flex items-center gap-3 mb-6">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00f0ff]/40 bg-[#00f0ff]/10 text-xs font-semibold uppercase tracking-widest text-[#00f0ff] backdrop-blur-md">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse"></span>
-                      Real Client · Verified
+                      Intent Lead Outbound System
                     </div>
-                    <span className="text-[10px] font-mono text-[#555] tracking-widest uppercase">AdRadar × SkillPrax</span>
+                    <span className="text-[10px] font-mono text-[#555] tracking-widest uppercase">ADradar</span>
                   </div>
 
                   <h3 className="text-3xl lg:text-4xl font-display font-bold mb-3 tracking-tight leading-snug text-white">
                     4 Qualified Meetings<br />Every Week.
                   </h3>
                   <p className="text-[#888888] leading-relaxed mb-4 text-base flex-1">
-                    A fractional paid media consultancy with zero pipeline transformed into a predictable meeting machine — using AdRadar's AI-driven lead intelligence. From 3 hrs of daily manual research to 0, in 48 hours.
+                    A fractional paid media consultancy with zero outbound pipeline — transformed into a predictable, automated meeting machine using AdRadar's AI-driven lead intelligence system.
                   </p>
 
-                  {/* Stats row */}
                   <div className="grid grid-cols-3 gap-3 border-t border-white/10 pt-5 mb-6">
                     <div>
                       <div className="text-3xl font-display font-bold text-[#00f0ff] mb-1">4×</div>
@@ -302,53 +297,42 @@ export default function App() {
                     </div>
                     <div>
                       <div className="text-3xl font-display font-bold text-white mb-1">0h</div>
-                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider">Research</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider">Research Time</div>
                     </div>
                     <div>
                       <div className="text-3xl font-display font-bold text-white mb-1">48h</div>
                       <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider">To First Lead</div>
                     </div>
                   </div>
-
-                  {/* CTA button */}
-                  <a
-                    href="/skillprax-case-study.html"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full h-12 rounded-xl bg-[#00f0ff] hover:bg-white text-black text-sm font-bold tracking-wide flex items-center justify-center gap-2 transition-all duration-300 group/btn shadow-[0_0_30px_-8px_rgba(0,240,255,0.6)]"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    Read Full Case Study
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="group-hover/btn:translate-x-1 transition-transform duration-300">
-                      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </a>
                 </div>
+                {/* Abstract geometry block in background */}
+                <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-gradient-to-br from-[#00f0ff]/20 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
               </div>
+
               {/* Case Study 1 */}
               <div className="w-[85vw] md:w-[45vw] xl:w-[32vw] h-[65vh] shrink-0 glass-panel p-10 lg:p-14 rounded-[2.5rem] flex flex-col justify-between group hover:border-[#00f0ff]/50 transition-all duration-500 overflow-hidden relative">
                 {/* Background Image Layer */}
-                <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&w=800&q=80" alt="Abstract Data Waves" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" alt="Real Estate Property Architecture" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none"></div>
 
                 <div className="relative z-10">
                   <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-black/50 text-xs font-semibold uppercase tracking-widest text-[#00f0ff] mb-8 group-hover:bg-[#00f0ff]/10 transition-colors backdrop-blur-md">
-                    Enterprise SaaS
+                    AI Inbox Intelligence System
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-display font-bold mb-4 tracking-tight leading-snug text-white">Pipeline Velocity Increased by 315%</h3>
+                  <h3 className="text-3xl lg:text-4xl font-display font-bold mb-4 tracking-tight leading-snug text-white">Inbox to viewing in 30 seconds.</h3>
                   <p className="text-[#888888] leading-relaxed mb-6 text-lg">
-                    Deployed proprietary intent scraping across 40k target accounts. The AI engine identified sub-second buying signals and delivered 1:1 personalized outreach at scale.
+                    The average agent takes hours to reply. We install an intelligent system straight into your email that instantly qualifies buyers and books 24/7 viewings without you touching your phone.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-8 mt-6 relative z-10">
                   <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">+315%</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Pipeline Growth</div>
+                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">&lt;30s</div>
+                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Response Time</div>
                   </div>
                   <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">-62%</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">CAC Reduction</div>
+                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">21x</div>
+                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Conversion Rate</div>
                   </div>
                 </div>
                 {/* Abstract geometry block in background */}
@@ -392,21 +376,21 @@ export default function App() {
 
                 <div className="relative z-10">
                   <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-black/50 text-xs font-semibold uppercase tracking-widest text-white mb-8 group-hover:bg-white/10 transition-colors backdrop-blur-md">
-                    Global Logistics
+                    Enterprise Operations
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-display font-bold mb-4 tracking-tight leading-snug text-white">Penetrating Sentinel Accounts</h3>
+                  <h3 className="text-3xl lg:text-4xl font-display font-bold mb-4 tracking-tight leading-snug text-white">E2E Client Onboarding System</h3>
                   <p className="text-[#888888] leading-relaxed mb-6 text-lg">
-                    Bypassed traditional gatekeepers by mapping organizational hierarchies natively. Achieved an unheard-of 12% meeting rate on cold global enterprise accounts.
+                    Replaced a fragmented 3-week manual setup with a continuous AI workflow. The intelligent system automatically generates contracts, collects client assets, and provisions project spaces.
                   </p>
                 </div>
                 <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-8 mt-6 relative z-10">
                   <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">12%</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Booking Rate</div>
+                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">0 Days</div>
+                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Time to Onboard</div>
                   </div>
                   <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">$4.2M</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Pipeline Gen</div>
+                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">100%</div>
+                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Admin Eliminated</div>
                   </div>
                 </div>
                 {/* Abstract geometry block in background */}
@@ -764,18 +748,10 @@ export default function App() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/10 pt-32 pb-10 overflow-hidden bg-black text-center">
         <div className="max-w-7xl mx-auto px-6 flex flex-col items-center mb-24 relative z-10">
-          <div className="flex items-center justify-center gap-4 md:gap-8 mb-8 w-full">
-            <div className="w-12 h-12 md:w-[6.5vw] md:h-[6.5vw] rounded-full bg-white flex items-center justify-center shrink-0">
-              <Zap className="text-black w-6 h-6 md:w-[3.5vw] md:h-[3.5vw]" />
-            </div>
+          <div className="flex items-center justify-center mb-8 w-full">
             <h2 className="text-6xl md:text-[10vw] font-display font-bold tracking-tighter leading-none text-white">CLICKFIELDAI</h2>
           </div>
-          <div className="flex flex-wrap justify-center gap-6 md:gap-10 text-[#888888] font-medium text-sm mb-12">
-            <a href="#" className="hover:text-white transition-colors">Twitter (X)</a>
-            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-          </div>
+
 
           <button className="hidden sm:flex w-14 h-14 rounded-full border border-white/20 items-center justify-center text-[#888888] hover:text-white hover:border-white transition-colors cursor-pointer z-50 pointer-events-auto" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             ↑
