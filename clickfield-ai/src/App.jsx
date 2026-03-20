@@ -1,26 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Target, Zap, ShieldCheck, ChevronRight, Hash } from 'lucide-react';
-import Beams from './Beams';
-import { ShaderAnimation } from './components/ui/ShaderAnimation';
-import { FallingPattern } from './components/ui/FallingPattern';
+import { ChevronRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   const heroRef = useRef(null);
-  const fluidBlob1 = useRef(null);
-  const fluidBlob2 = useRef(null);
-  const horizontalSectionRef = useRef(null);
-  const horizontalScrollRef = useRef(null);
+  const backgroundBlob1Ref = useRef(null);
+  const backgroundBlob2Ref = useRef(null);
   const trustRef = useRef(null);
   const headerRef = useRef(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Refs for elements that track the mouse
   const heroTextRef = useRef(null);
-  const heroSubtextRef = useRef(null);
-  const heroWaveRef = useRef(null);
 
   useEffect(() => {
     // Reveal Navigation
@@ -37,7 +30,7 @@ export default function App() {
     );
 
     // Parallax Blobs
-    gsap.to(fluidBlob1.current, {
+    gsap.to(backgroundBlob1Ref.current, {
       yPercent: 30,
       ease: "none",
       scrollTrigger: {
@@ -48,7 +41,7 @@ export default function App() {
       }
     });
 
-    gsap.to(fluidBlob2.current, {
+    gsap.to(backgroundBlob2Ref.current, {
       yPercent: -20,
       ease: "none",
       scrollTrigger: {
@@ -80,46 +73,23 @@ export default function App() {
     }
 
     // --- Interactive Mouse Parallax (Hero Section) ---
-    // Smooth quickTo animations for near-instant rendering
     const xToHeroText = gsap.quickTo(heroTextRef.current, "x", { duration: 0.8, ease: "power3" });
     const yToHeroText = gsap.quickTo(heroTextRef.current, "y", { duration: 0.8, ease: "power3" });
-
-    const xToHeroSubtext = gsap.quickTo(heroSubtextRef.current, "x", { duration: 1.2, ease: "power3" });
-    const yToHeroSubtext = gsap.quickTo(heroSubtextRef.current, "y", { duration: 1.2, ease: "power3" });
-
-    const xToHeroWave = gsap.quickTo(heroWaveRef.current, "x", { duration: 1.5, ease: "power2" });
-    const yToHeroWave = gsap.quickTo(heroWaveRef.current, "y", { duration: 1.5, ease: "power2" });
 
     const handleMouseMove = (e) => {
       if (!heroRef.current) return;
       const { left, top, width, height } = heroRef.current.getBoundingClientRect();
-
-      // Calculate mouse position relative to center of the hero section (-1 to 1)
       const x = (e.clientX - left - width / 2) / (width / 2);
       const y = (e.clientY - top - height / 2) / (height / 2);
-
-      // Apply subtle movement based on position. Different elements move at different speeds for depth
       xToHeroText(x * 30);
       yToHeroText(y * 30);
-
-      xToHeroSubtext(x * 15);
-      yToHeroSubtext(y * 15);
-
-      if (heroWaveRef.current) {
-        xToHeroWave(-x * 40); // Parallax opposite to mouse
-        yToHeroWave(-y * 20);
-      }
     };
 
     const heroElement = heroRef.current;
     if (heroElement) {
       heroElement.addEventListener('mousemove', handleMouseMove);
-
-      // Reset position when mouse leaves the section
       heroElement.addEventListener('mouseleave', () => {
         xToHeroText(0); yToHeroText(0);
-        xToHeroSubtext(0); yToHeroSubtext(0);
-        xToHeroWave(0); yToHeroWave(0);
       });
     }
 
@@ -137,72 +107,141 @@ export default function App() {
 
       {/* Background Blobs for specific sections */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div ref={fluidBlob1} className="absolute blur-[120px] rounded-full w-[40vw] h-[40vw] bg-[#00f0ff] opacity-20 -top-[10%] -left-[10%] mix-blend-screen"></div>
-        <div ref={fluidBlob2} className="absolute blur-[120px] rounded-full w-[50vw] h-[50vw] bg-[#0055ff] opacity-20 top-[40%] -right-[10%] mix-blend-screen"></div>
+        <div ref={backgroundBlob1Ref} className="absolute blur-[140px] rounded-full w-[45vw] h-[45vw] bg-[#00f0ff] opacity-[0.35] -top-[10%] -left-[10%] mix-blend-screen"></div>
+        <div ref={backgroundBlob2Ref} className="absolute blur-[140px] rounded-full w-[55vw] h-[55vw] bg-[#0055ff] opacity-[0.35] top-[30%] -right-[10%] mix-blend-screen"></div>
       </div>
 
       {/* Floating Header */}
-      <header className="fixed top-6 left-0 right-0 z-[100] flex justify-center px-4 mix-blend-difference pointer-events-none">
-        <nav ref={headerRef} className="glass-panel rounded-full px-6 py-3 flex items-center gap-8 shadow-2xl backdrop-blur-xl pointer-events-auto">
-          <div className="flex items-center cursor-pointer">
-            <span className="font-display font-bold tracking-tight text-white whitespace-nowrap">CLICKFIELDAI</span>
-          </div>
+      <header className="fixed top-0 left-0 right-0 z-[100] pointer-events-none safe-top">
+        {/* Nav pill row */}
+        <div className="flex justify-center px-4 pt-4 md:pt-5">
+          <nav
+            ref={headerRef}
+            className="glass-panel rounded-full p-1.5 flex items-center gap-0.5 shadow-2xl backdrop-blur-xl pointer-events-auto"
+          >
+            {/* Logo */}
+            <span className="font-display font-bold tracking-tight text-white whitespace-nowrap text-sm select-none px-4 py-1.5">
+              CLICKFIELDAI
+            </span>
 
-          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-[#888888]">
-            <a href="#platform" className="hover:text-white transition-colors">Platform</a>
-            <a href="#case-studies" className="hover:text-white transition-colors">Case Studies</a>
-            <a href="#customers" className="hover:text-white transition-colors">Customers</a>
-          </div>
+            {/* Desktop nav links — hidden below lg to avoid crowding */}
+            <div className="hidden lg:flex items-center gap-0.5">
+              <a href="#platform"     className="text-[#888] hover:text-white hover:bg-white/[0.06] active:bg-white/10 transition-all text-sm font-medium whitespace-nowrap px-3.5 py-2 rounded-full">Platform</a>
+              <a href="#case-studies" className="text-[#888] hover:text-white hover:bg-white/[0.06] active:bg-white/10 transition-all text-sm font-medium whitespace-nowrap px-3.5 py-2 rounded-full">Case Studies</a>
+              <a href="#customers"    className="text-[#888] hover:text-white hover:bg-white/[0.06] active:bg-white/10 transition-all text-sm font-medium whitespace-nowrap px-3.5 py-2 rounded-full">Customers</a>
+            </div>
 
-          <a href="https://cal.com/kishore-clickfieldai/30min" target="_blank" rel="noopener noreferrer" className="hidden sm:flex text-sm font-semibold bg-white text-black px-5 py-2 rounded-full hover:bg-gray-200 transition-colors">
-            Init Pipeline
-          </a>
-        </nav>
+            {/* Divider — desktop only */}
+            <div className="hidden lg:block w-px h-4 bg-white/10 mx-1" />
+
+            {/* CTA button */}
+            <a
+              href="https://cal.com/kishore-clickfieldai/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-semibold bg-white text-black px-5 py-2 rounded-full hover:bg-[#e8e8e8] active:scale-95 transition-all whitespace-nowrap min-h-[44px] flex items-center"
+            >
+              Book a Call
+            </a>
+
+            {/* Hamburger — hidden on lg+ */}
+            <button
+              className="lg:hidden w-9 h-9 rounded-full flex items-center justify-center hover:bg-white/[0.08] active:bg-white/[0.12] transition-colors ml-0.5"
+              onClick={() => setMobileMenuOpen(o => !o)}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
+            >
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+                {mobileMenuOpen ? (
+                  <path d="M1.5 1.5l12 12M13.5 1.5l-12 12" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                ) : (
+                  <path d="M1.5 3.5h12M1.5 7.5h12M1.5 11.5h12" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                )}
+              </svg>
+            </button>
+          </nav>
+        </div>
+
+        {/* Mobile / tablet dropdown — hidden on lg+ */}
+        <div
+          className={`lg:hidden mx-4 mt-2 glass-panel rounded-2xl overflow-hidden pointer-events-auto transition-all duration-300 ease-in-out ${
+            mobileMenuOpen ? 'max-h-[30rem] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+          }`}
+        >
+          <nav className="flex flex-col p-4 gap-0.5" aria-label="Mobile navigation">
+            {[
+              { href: '#platform',     label: 'Platform' },
+              { href: '#case-studies', label: 'Case Studies' },
+              { href: '#customers',    label: 'Customers' },
+              { href: '#services',     label: 'Services' },
+              { href: '#how-it-works', label: 'How It Works' },
+              { href: '#faq',          label: 'FAQ' },
+            ].map(({ href, label }) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-[#bbb] hover:text-white active:text-white font-medium text-base px-4 py-3 rounded-xl hover:bg-white/[0.05] active:bg-white/[0.08] transition-colors min-h-[48px] flex items-center"
+              >
+                {label}
+              </a>
+            ))}
+            <div className="h-px bg-white/[0.06] my-1" />
+            <a
+              href="https://cal.com/kishore-clickfieldai/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-3.5 rounded-xl bg-white text-black text-center font-bold text-sm active:scale-95 transition-transform min-h-[48px] flex items-center justify-center"
+            >
+              Book a Growth Call →
+            </a>
+          </nav>
+        </div>
       </header>
 
       {/* Hero Section */}
-      <main id="platform" ref={heroRef} className="relative z-10 min-h-[85vh] flex flex-col justify-end pb-20 px-6 md:px-12 lg:px-24 overflow-hidden bg-black">
+      <main id="platform" ref={heroRef} className="hero-section relative z-10 flex flex-col justify-end pb-[clamp(3rem,6vw,5rem)] px-[clamp(1.25rem,4vw,6rem)] overflow-hidden" style={{ background: 'radial-gradient(ellipse 100% 80% at 10% 100%, rgba(0,240,255,0.22) 0%, transparent 55%), radial-gradient(ellipse 80% 70% at 90% 5%, rgba(0,85,255,0.20) 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,85,255,0.06) 0%, transparent 70%), #000' }}>
 
-        {/* Colorful Glow Blobs matching site theme */}
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen">
-          <div ref={fluidBlob1} className="blob blob-1 mix-blend-screen"></div>
-          <div ref={fluidBlob2} className="blob blob-2 mix-blend-screen"></div>
-        </div>
+        {/* Subtle grid texture */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
 
-        {/* Cinematic Curtain Background */}
-        <div 
-          className="absolute top-0 left-0 w-full h-[65vh] flex overflow-hidden opacity-30 pointer-events-none" 
-          style={{ maskImage: 'linear-gradient(to bottom, #000000 0%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, #000000 0%, transparent 100%)' }}
-        >
-          {Array.from({ length: 40 }).map((_, i) => (
-            <div 
-              key={i} 
-              className="flex-1 h-full" 
-              style={{ background: 'linear-gradient(90deg, #111 0%, #aaa 50%, #111 100%)' }} 
-            />
-          ))}
+        {/* Decorative glow orbs inside hero */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-[8%] right-[6%] w-[min(50vw,420px)] h-[min(50vw,420px)] rounded-full bg-[#0055ff]/20 blur-[90px]"></div>
+          <div className="absolute top-[14%] right-[14%] w-[min(30vw,240px)] h-[min(30vw,240px)] rounded-full bg-[#00f0ff]/10 blur-[60px]"></div>
+          <div className="absolute top-[5%] left-[35%] w-[min(18vw,140px)] h-[min(18vw,140px)] rounded-full bg-[#00f0ff]/8 blur-[50px]"></div>
         </div>
 
         {/* Main Content */}
-        <div className="relative z-10 w-full flex flex-col items-start mt-24">
-          <h1 
-            ref={heroTextRef} 
-            className="hero-anim text-[10vw] md:text-[6vw] lg:text-[5.5vw] font-sans font-bold tracking-tight leading-[1.05] mb-12 text-gradient drop-shadow-2xl will-change-transform flex flex-col"
+        <div className="relative z-10 w-full flex flex-col items-start mt-[clamp(6rem,14vw,8rem)]">
+
+          {/* Live badge */}
+          <div className="hero-anim mb-5">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/[0.12] bg-white/[0.04] text-xs font-medium text-[#aaa] tracking-wide backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse shrink-0"></span>
+              AI Revenue Infrastructure · Built for B2B
+            </span>
+          </div>
+
+          <h1
+            ref={heroTextRef}
+            className="hero-anim text-[clamp(1.875rem,8.5vw,5rem)] font-sans font-bold tracking-tight leading-[1.05] mb-10 sm:mb-12 text-white drop-shadow-2xl will-change-transform flex flex-col"
           >
             <span className="mb-2 pb-2">The definitive AI infrastructure</span>
-            <span className="text-white/80 pb-4">for high-performing B2B teams.</span>
+            <span className="text-white/75 pb-4">for high-performing B2B teams.</span>
           </h1>
 
           <div className="hero-anim flex items-center">
-            {/* Minimal Pill Button */}
-            <a 
-              href="https://cal.com/kishore-clickfieldai/30min" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="group flex items-center gap-4 bg-white hover:bg-white/90 transition-colors text-black rounded-full pl-6 pr-1.5 py-1.5 border border-white/20"
+            {/* Pill CTA — min 44px touch target per iOS HIG */}
+            <a
+              href="https://cal.com/kishore-clickfieldai/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center flex-wrap bg-white hover:bg-white/90 active:scale-95 transition-all text-black rounded-full pl-5 sm:pl-6 pr-1.5 py-2 sm:py-1.5 border border-white/20 min-h-[44px]" style={{ gap: 'clamp(0.5rem, 2vw, 1rem)' }}
             >
               <span className="font-sans font-medium text-sm tracking-wide">Let's talk</span>
-              <div className="flex items-center justify-center bg-black text-white rounded-full w-8 h-8 group-hover:translate-x-1 transition-transform">
+              <div className="flex items-center justify-center bg-black text-white rounded-full w-8 h-8 sm:w-8 sm:h-8 group-hover:translate-x-1 transition-transform shrink-0">
                 <ChevronRight size={16} strokeWidth={2.5} />
               </div>
             </a>
@@ -217,38 +256,38 @@ export default function App() {
             Generated $250k+ in client revenue
           </p>
           <div className="flex items-center opacity-50 grayscale hover:grayscale-0 transition-all duration-500 overflow-hidden relative">
-            <div className="animate-marquee gap-16 px-4">
+            <div className="animate-marquee gap-16 px-4 items-center">
               {/* Paid Media Lab */}
-              <h3 className="font-sans font-black text-xl uppercase tracking-widest shrink-0 flex items-center gap-2">
+              <h3 className="font-sans font-black text-xl uppercase tracking-widest shrink-0 flex items-center gap-2 leading-none">
                 <span className="text-[11px] border border-current px-1 py-0.5 font-bold">&lt;/&gt;</span> PAID MEDIA LAB
               </h3>
               {/* Blush & Hush */}
-              <h3 className="font-serif font-semibold text-2xl tracking-tight shrink-0 italic">Blush &amp; Hush</h3>
+              <h3 className="font-serif font-semibold text-xl tracking-tight shrink-0 italic leading-none">Blush &amp; Hush</h3>
               {/* SLAM Fitness */}
-              <h3 className="font-sans font-black text-3xl tracking-tighter shrink-0">
+              <h3 className="font-sans font-black text-xl tracking-tighter shrink-0 leading-none">
                 SL<span className="text-red-500">A</span>M
               </h3>
               {/* Phill K */}
-              <h3 className="font-display font-medium text-xl tracking-[0.3em] uppercase shrink-0">PHILL K</h3>
+              <h3 className="font-display font-medium text-xl tracking-[0.3em] uppercase shrink-0 leading-none">PHILL K</h3>
               {/* T-mark brand */}
-              <h3 className="font-display font-black text-3xl tracking-tighter shrink-0">T▾</h3>
+              <h3 className="font-display font-black text-xl tracking-tighter shrink-0 leading-none">T▾</h3>
               {/* California Business Journal */}
-              <h3 className="font-serif font-black text-xl tracking-tight uppercase shrink-0">California Business Journal</h3>
+              <h3 className="font-serif font-black text-xl tracking-tight uppercase shrink-0 leading-none">California Business Journal</h3>
               {/* Hyundai */}
-              <h3 className="font-sans font-bold text-2xl tracking-[0.15em] uppercase shrink-0">HYUNDAI</h3>
+              <h3 className="font-sans font-bold text-xl tracking-[0.15em] uppercase shrink-0 leading-none">HYUNDAI</h3>
 
               {/* Loop 2 */}
-              <h3 className="font-sans font-black text-xl uppercase tracking-widest shrink-0 flex items-center gap-2 ml-8">
+              <h3 className="font-sans font-black text-xl uppercase tracking-widest shrink-0 flex items-center gap-2 leading-none">
                 <span className="text-[11px] border border-current px-1 py-0.5 font-bold">&lt;/&gt;</span> PAID MEDIA LAB
               </h3>
-              <h3 className="font-serif font-semibold text-2xl tracking-tight shrink-0 italic">Blush &amp; Hush</h3>
-              <h3 className="font-sans font-black text-3xl tracking-tighter shrink-0">
+              <h3 className="font-serif font-semibold text-xl tracking-tight shrink-0 italic leading-none">Blush &amp; Hush</h3>
+              <h3 className="font-sans font-black text-xl tracking-tighter shrink-0 leading-none">
                 SL<span className="text-red-500">A</span>M
               </h3>
-              <h3 className="font-display font-medium text-xl tracking-[0.3em] uppercase shrink-0">PHILL K</h3>
-              <h3 className="font-display font-black text-3xl tracking-tighter shrink-0">T▾</h3>
-              <h3 className="font-serif font-black text-xl tracking-tight uppercase shrink-0">California Business Journal</h3>
-              <h3 className="font-sans font-bold text-2xl tracking-[0.15em] uppercase shrink-0">HYUNDAI</h3>
+              <h3 className="font-display font-medium text-xl tracking-[0.3em] uppercase shrink-0 leading-none">PHILL K</h3>
+              <h3 className="font-display font-black text-xl tracking-tighter shrink-0 leading-none">T▾</h3>
+              <h3 className="font-serif font-black text-xl tracking-tight uppercase shrink-0 leading-none">California Business Journal</h3>
+              <h3 className="font-sans font-bold text-xl tracking-[0.15em] uppercase shrink-0 leading-none">HYUNDAI</h3>
             </div>
           </div>
         </div>
@@ -256,10 +295,10 @@ export default function App() {
 
 
       {/* Automatic Marquee Section: Case Studies */}
-      <section id="case-studies" className="relative z-10 w-full overflow-hidden py-32 bg-gradient-to-b from-transparent to-white/5">
-        <div className="mb-20 px-6 max-w-7xl mx-auto text-center md:text-left">
-          <h2 className="text-5xl md:text-7xl font-display font-bold mb-6 tracking-tight">AI Case Studies.</h2>
-          <p className="text-xl text-[#888888] mb-10 w-full md:w-3/5 leading-relaxed">
+      <section id="case-studies" className="relative z-10 w-full md:overflow-hidden py-[clamp(3rem,6vw,8rem)] bg-gradient-to-b from-transparent to-white/5">
+        <div className="mb-[clamp(3rem,5vw,5rem)] px-6 max-w-7xl mx-auto text-center md:text-left">
+          <h2 className="text-[clamp(2rem,5vw,4.5rem)] font-display font-bold mb-6 tracking-tight">AI Case Studies.</h2>
+          <p className="text-[clamp(1rem,2vw,1.25rem)] text-[#888888] mb-10 w-full md:w-3/5 leading-relaxed">
             Explore how high-growth organizations deploy our Neural Engine to rewrite their revenue architecture and crush their acquisition targets natively.
           </p>
         </div>
@@ -269,132 +308,121 @@ export default function App() {
             <div key={loop} className="flex gap-8 shrink-0 px-4 items-center">
 
               {/* AdRadar Case Study */}
-              <div className="w-[85vw] md:w-[45vw] xl:w-[32vw] h-[65vh] shrink-0 glass-panel p-10 lg:p-14 rounded-[2.5rem] flex flex-col justify-between group hover:border-[#00f0ff]/70 transition-all duration-500 overflow-hidden relative border-[#00f0ff]/30">
-                {/* Background Image Layer */}
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Data Analytics Visualization" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
+              <div className="w-[78vw] sm:w-[55vw] md:w-[38vw] xl:w-[26vw] shrink-0 glass-panel p-5 sm:p-6 lg:p-8 rounded-2xl flex flex-col justify-between group hover:border-[#00f0ff]/70 transition-all duration-500 overflow-hidden relative border-[#00f0ff]/30">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Data Analytics Visualization" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-50 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none"></div>
 
-                <div className="relative z-10 flex flex-col h-full">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00f0ff]/40 bg-[#00f0ff]/10 text-xs font-semibold uppercase tracking-widest text-[#00f0ff] backdrop-blur-md">
+                <div className="relative z-10 flex flex-col gap-3">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#00f0ff]/40 bg-[#00f0ff]/10 text-[10px] font-semibold uppercase tracking-widest text-[#00f0ff] backdrop-blur-md">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse"></span>
-                      Intent Lead Outbound System
+                      Intent Lead Outbound
                     </div>
                     <span className="text-[10px] font-mono text-[#555] tracking-widest uppercase">ADradar</span>
                   </div>
-
-                  <h3 className="text-3xl lg:text-4xl font-display font-bold mb-3 tracking-tight leading-snug text-white">
-                    4 Qualified Meetings<br />Every Week.
+                  <h3 className="text-[clamp(1.1rem,2.2vw,1.5rem)] font-display font-bold tracking-tight leading-snug text-white">
+                    4 Qualified Meetings Every Week.
                   </h3>
-                  <p className="text-[#888888] leading-relaxed mb-4 text-base flex-1">
-                    A fractional paid media consultancy with zero outbound pipeline — transformed into a predictable, automated meeting machine using AdRadar's AI-driven lead intelligence system.
+                  <p className="text-[#888888] text-[clamp(0.75rem,1.2vw,0.875rem)] leading-relaxed">
+                    A fractional paid media consultancy transformed into a predictable, automated meeting machine using AI-driven lead intelligence.
                   </p>
-
-                  <div className="grid grid-cols-3 gap-3 border-t border-white/10 pt-5 mb-6">
+                  <div className="grid grid-cols-3 gap-2 border-t border-white/10 pt-4 mt-1">
                     <div>
-                      <div className="text-3xl font-display font-bold text-[#00f0ff] mb-1">4×</div>
-                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider">Meetings/Wk</div>
+                      <div className="text-[clamp(1.25rem,2.5vw,1.75rem)] font-display font-bold text-[#00f0ff] mb-0.5">4×</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider leading-tight">Meetings/Wk</div>
                     </div>
                     <div>
-                      <div className="text-3xl font-display font-bold text-white mb-1">0h</div>
-                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider">Research Time</div>
+                      <div className="text-[clamp(1.25rem,2.5vw,1.75rem)] font-display font-bold text-white mb-0.5">0h</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider leading-tight">Research Time</div>
                     </div>
                     <div>
-                      <div className="text-3xl font-display font-bold text-white mb-1">48h</div>
-                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider">To First Lead</div>
+                      <div className="text-[clamp(1.25rem,2.5vw,1.75rem)] font-display font-bold text-white mb-0.5">48h</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider leading-tight">First Lead</div>
                     </div>
                   </div>
                 </div>
-                {/* Abstract geometry block in background */}
-                <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-gradient-to-br from-[#00f0ff]/20 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
+                <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-gradient-to-br from-[#00f0ff]/20 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
               </div>
 
               {/* Case Study 1 */}
-              <div className="w-[85vw] md:w-[45vw] xl:w-[32vw] h-[65vh] shrink-0 glass-panel p-10 lg:p-14 rounded-[2.5rem] flex flex-col justify-between group hover:border-[#00f0ff]/50 transition-all duration-500 overflow-hidden relative">
-                {/* Background Image Layer */}
-                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" alt="Real Estate Property Architecture" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
+              <div className="w-[78vw] sm:w-[55vw] md:w-[38vw] xl:w-[26vw] shrink-0 glass-panel p-5 sm:p-6 lg:p-8 rounded-2xl flex flex-col justify-between group hover:border-[#00f0ff]/50 transition-all duration-500 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" alt="Real Estate Property Architecture" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-50 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none"></div>
 
-                <div className="relative z-10">
-                  <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-black/50 text-xs font-semibold uppercase tracking-widest text-[#00f0ff] mb-8 group-hover:bg-[#00f0ff]/10 transition-colors backdrop-blur-md">
+                <div className="relative z-10 flex flex-col gap-3">
+                  <div className="inline-block px-3 py-1 rounded-full border border-white/10 bg-black/50 text-[10px] font-semibold uppercase tracking-widest text-[#00f0ff] group-hover:bg-[#00f0ff]/10 transition-colors backdrop-blur-md w-fit">
                     AI Inbox Intelligence System
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-display font-bold mb-4 tracking-tight leading-snug text-white">Inbox to viewing in 30 seconds.</h3>
-                  <p className="text-[#888888] leading-relaxed mb-6 text-lg">
-                    The average agent takes hours to reply. We install an intelligent system straight into your email that instantly qualifies buyers and books 24/7 viewings without you touching your phone.
+                  <h3 className="text-[clamp(1.1rem,2.2vw,1.5rem)] font-display font-bold tracking-tight leading-snug text-white">Inbox to viewing in 30 seconds.</h3>
+                  <p className="text-[#888888] text-[clamp(0.75rem,1.2vw,0.875rem)] leading-relaxed">
+                    We install an intelligent system into your email that instantly qualifies buyers and books viewings 24/7 without you touching your phone.
                   </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-8 mt-6 relative z-10">
-                  <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">&lt;30s</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Response Time</div>
+                  <div className="grid grid-cols-2 gap-3 border-t border-white/10 pt-4 mt-1">
+                    <div>
+                      <div className="text-[clamp(1.4rem,2.8vw,2rem)] font-display font-bold text-white mb-0.5">&lt;30s</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider leading-tight">Response Time</div>
+                    </div>
+                    <div>
+                      <div className="text-[clamp(1.4rem,2.8vw,2rem)] font-display font-bold text-white mb-0.5">21x</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider leading-tight">Conversion Rate</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">21x</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Conversion Rate</div>
-                  </div>
                 </div>
-                {/* Abstract geometry block in background */}
-                <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-gradient-to-br from-[#00f0ff]/20 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
+                <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-gradient-to-br from-[#00f0ff]/20 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
               </div>
 
               {/* Case Study 2 */}
-              <div className="w-[85vw] md:w-[45vw] xl:w-[32vw] h-[65vh] shrink-0 glass-panel p-10 lg:p-14 rounded-[2.5rem] flex flex-col justify-between group hover:border-[#0055ff]/50 transition-all duration-500 overflow-hidden relative">
-                {/* Background Image Layer */}
-                <img src="https://images.unsplash.com/photo-1639322537231-2f206e06af84?auto=format&fit=crop&w=800&q=80" alt="Abstract 3D Structures" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
+              <div className="w-[78vw] sm:w-[55vw] md:w-[38vw] xl:w-[26vw] shrink-0 glass-panel p-5 sm:p-6 lg:p-8 rounded-2xl flex flex-col justify-between group hover:border-[#0055ff]/50 transition-all duration-500 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1639322537231-2f206e06af84?auto=format&fit=crop&w=800&q=80" alt="Abstract 3D Structures" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-50 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none"></div>
 
-                <div className="relative z-10">
-                  <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-black/50 text-xs font-semibold uppercase tracking-widest text-[#0055ff] mb-8 group-hover:bg-[#0055ff]/10 transition-colors backdrop-blur-md">
+                <div className="relative z-10 flex flex-col gap-3">
+                  <div className="inline-block px-3 py-1 rounded-full border border-white/10 bg-black/50 text-[10px] font-semibold uppercase tracking-widest text-[#0055ff] group-hover:bg-[#0055ff]/10 transition-colors backdrop-blur-md w-fit">
                     FinTech Series B
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-display font-bold mb-4 tracking-tight leading-snug text-white">Zero-Touch SDR Automation</h3>
-                  <p className="text-[#888888] leading-relaxed mb-6 text-lg">
-                    Replaced an underperforming 5-person outbound team with our Neural Architecture. Booked 48 qualified meetings in the first 30 days without manual intervention.
+                  <h3 className="text-[clamp(1.1rem,2.2vw,1.5rem)] font-display font-bold tracking-tight leading-snug text-white">Zero-Touch SDR Automation</h3>
+                  <p className="text-[#888888] text-[clamp(0.75rem,1.2vw,0.875rem)] leading-relaxed">
+                    Replaced an underperforming 5-person outbound team with our Neural Architecture. 48 qualified meetings in the first 30 days.
                   </p>
-                </div>
-                <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-8 mt-6 relative z-10">
-                  <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">48</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Net New Meetings</div>
+                  <div className="grid grid-cols-2 gap-3 border-t border-white/10 pt-4 mt-1">
+                    <div>
+                      <div className="text-[clamp(1.4rem,2.8vw,2rem)] font-display font-bold text-white mb-0.5">48</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider leading-tight">Net New Meetings</div>
+                    </div>
+                    <div>
+                      <div className="text-[clamp(1.4rem,2.8vw,2rem)] font-display font-bold text-white mb-0.5">0</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider leading-tight">Manual SDRs</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">0</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Manual SDRs</div>
-                  </div>
                 </div>
-                {/* Abstract geometry block in background */}
-                <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-bl from-[#0055ff]/20 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
+                <div className="absolute -top-16 -right-16 w-48 h-48 bg-gradient-to-bl from-[#0055ff]/20 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
               </div>
 
               {/* Case Study 3 */}
-              <div className="w-[85vw] md:w-[45vw] xl:w-[32vw] h-[65vh] shrink-0 glass-panel p-10 lg:p-14 rounded-[2.5rem] flex flex-col justify-between group hover:border-white/40 transition-all duration-500 overflow-hidden relative">
-                {/* Background Image Layer */}
-                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80" alt="Abstract Network Architecture" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
+              <div className="w-[78vw] sm:w-[55vw] md:w-[38vw] xl:w-[26vw] shrink-0 glass-panel p-5 sm:p-6 lg:p-8 rounded-2xl flex flex-col justify-between group hover:border-white/40 transition-all duration-500 overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80" alt="Abstract Network Architecture" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-50 transition-opacity duration-700 mix-blend-luminosity grayscale pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent pointer-events-none"></div>
 
-                <div className="relative z-10">
-                  <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-black/50 text-xs font-semibold uppercase tracking-widest text-white mb-8 group-hover:bg-white/10 transition-colors backdrop-blur-md">
+                <div className="relative z-10 flex flex-col gap-3">
+                  <div className="inline-block px-3 py-1 rounded-full border border-white/10 bg-black/50 text-[10px] font-semibold uppercase tracking-widest text-white group-hover:bg-white/10 transition-colors backdrop-blur-md w-fit">
                     Enterprise Operations
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-display font-bold mb-4 tracking-tight leading-snug text-white">E2E Client Onboarding System</h3>
-                  <p className="text-[#888888] leading-relaxed mb-6 text-lg">
-                    Replaced a fragmented 3-week manual setup with a continuous AI workflow. The intelligent system automatically generates contracts, collects client assets, and provisions project spaces.
+                  <h3 className="text-[clamp(1.1rem,2.2vw,1.5rem)] font-display font-bold tracking-tight leading-snug text-white">E2E Client Onboarding System</h3>
+                  <p className="text-[#888888] text-[clamp(0.75rem,1.2vw,0.875rem)] leading-relaxed">
+                    Replaced a fragmented 3-week manual setup with a continuous AI workflow that generates contracts, collects assets, and provisions spaces automatically.
                   </p>
-                </div>
-                <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-8 mt-6 relative z-10">
-                  <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">0 Days</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Time to Onboard</div>
+                  <div className="grid grid-cols-2 gap-3 border-t border-white/10 pt-4 mt-1">
+                    <div>
+                      <div className="text-[clamp(1.4rem,2.8vw,2rem)] font-display font-bold text-white mb-0.5">0 Days</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider leading-tight">Time to Onboard</div>
+                    </div>
+                    <div>
+                      <div className="text-[clamp(1.4rem,2.8vw,2rem)] font-display font-bold text-white mb-0.5">100%</div>
+                      <div className="text-[10px] text-[#888888] font-medium uppercase tracking-wider leading-tight">Admin Eliminated</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-4xl lg:text-5xl font-display font-bold text-white mb-2">100%</div>
-                    <div className="text-sm text-[#888888] font-medium uppercase tracking-wider">Admin Eliminated</div>
-                  </div>
                 </div>
-                {/* Abstract geometry block in background */}
-                <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-white/10 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
+                <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-gradient-to-tr from-white/10 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
               </div>
 
             </div>
@@ -402,7 +430,7 @@ export default function App() {
         </div>
       </section>
       {/* AI Systems Services Section */}
-      <section id="services" className="relative z-10 w-full py-20 px-6 bg-black overflow-hidden">
+      <section id="services" className="relative z-10 w-full py-16 sm:py-20 px-4 sm:px-6 bg-black overflow-hidden">
 
         {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none">
@@ -413,12 +441,12 @@ export default function App() {
         <div className="max-w-6xl mx-auto relative z-10">
 
           {/* Heading block */}
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-7xl font-display font-bold tracking-tight text-white mb-6 leading-[1.1]">
+          <div className="text-center mb-[clamp(2rem,5vw,5rem)]">
+            <h2 className="text-[clamp(2rem,5vw,4.5rem)] font-display font-bold tracking-tight text-white mb-6 leading-[1.1]">
               AI Systems Built for<br />
               <span className="text-gradient">Revenue & Operational Scale</span>
             </h2>
-            <p className="text-[#888] text-lg font-sans max-w-2xl mx-auto leading-relaxed">
+            <p className="text-[#888] text-[clamp(0.9rem,1.5vw,1.125rem)] font-sans max-w-2xl mx-auto leading-relaxed">
               We design and deploy AI infrastructure that removes operational bottlenecks, unlocks new growth channels, and creates measurable business leverage.
             </p>
           </div>
@@ -427,7 +455,7 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
             {/* Card 1 — Service Businesses */}
-            <div className="group relative bg-[#0a0a0a] border border-white/[0.07] hover:border-[#00f0ff]/25 rounded-2xl p-10 flex flex-col transition-all duration-500 cursor-pointer hover:shadow-[0_0_60px_-15px_rgba(0,240,255,0.2)]">
+            <div className="group relative bg-[#0a0a0a] border border-white/[0.07] hover:border-[#00f0ff]/25 rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col transition-all duration-500 cursor-pointer hover:shadow-[0_0_60px_-15px_rgba(0,240,255,0.2)]">
               {/* Dot grid */}
               <div className="absolute inset-0 rounded-2xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #00f0ff 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
               {/* Top glow on hover */}
@@ -476,7 +504,7 @@ export default function App() {
             </div>
 
             {/* Card 2 — Enterprise */}
-            <div className="group relative bg-[#0a0a0a] border border-white/[0.07] hover:border-[#4488ff]/25 rounded-2xl p-10 flex flex-col transition-all duration-500 cursor-pointer hover:shadow-[0_0_60px_-15px_rgba(0,85,255,0.25)]">
+            <div className="group relative bg-[#0a0a0a] border border-white/[0.07] hover:border-[#4488ff]/25 rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col transition-all duration-500 cursor-pointer hover:shadow-[0_0_60px_-15px_rgba(0,85,255,0.25)]">
               <div className="absolute inset-0 rounded-2xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #4488ff 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#4488ff]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-t-2xl" />
 
@@ -523,13 +551,13 @@ export default function App() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="relative z-10 w-full py-20 px-6 bg-black overflow-hidden">
+      <section id="how-it-works" className="relative z-10 w-full py-16 sm:py-20 px-4 sm:px-6 bg-black overflow-hidden">
 
         <div className="max-w-6xl mx-auto relative z-10">
 
           {/* Heading */}
-          <div className="text-center mb-20">
-            <h2 className="text-6xl md:text-8xl font-display font-bold tracking-tight mb-5">
+          <div className="text-center mb-[clamp(3rem,5vw,5rem)]">
+            <h2 className="text-[clamp(2.5rem,6vw,6rem)] font-display font-bold tracking-tight mb-5">
               <span className="text-white">How It </span>
               <span className="text-gradient">Works</span>
             </h2>
@@ -660,16 +688,16 @@ export default function App() {
         {/* Top rule */}
         <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-        <div className="max-w-7xl mx-auto px-6 py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-24 md:py-32">
 
           {/* Ambient glow */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute bottom-0 left-1/3 w-[40vw] h-[20vw] rounded-full bg-[#00f0ff]/4 blur-[120px]" />
           </div>
           {/* LET'S TALK display heading */}
-          <div className="relative z-10 mb-16 md:mb-20">
+          <div className="relative z-10 mb-[clamp(2.5rem,5vw,5rem)]">
             <p className="text-[11px] font-mono text-[#00f0ff]/50 tracking-[0.35em] uppercase mb-4">// Ready to begin?</p>
-            <h2 className="text-[14vw] md:text-[8vw] font-display font-black leading-none tracking-tighter">
+            <h2 className="text-[clamp(2.75rem,12vw,8rem)] font-display font-black leading-none tracking-tighter">
               <span className="text-white">LET'S </span><span className="text-gradient">TALK.</span>
             </h2>
           </div>
@@ -687,7 +715,7 @@ export default function App() {
                 { title: 'System recommendations', sub: 'Tools and workflows tailored to your ops' },
                 { title: 'Zero pressure', sub: 'Just a focused, strategic conversation' },
               ].map(({ title, sub }, i) => (
-                <div key={i} className={`flex items-start gap-5 py-7 ${i < 3 ? 'border-b border-white/8' : ''}`}>
+                <div key={i} className={`flex items-start gap-5 py-7 ${i < 3 ? 'border-b border-white/[0.08]' : ''}`}>
                   <span className="mt-1 text-[#00f0ff] text-xl leading-none shrink-0">✦</span>
                   <div>
                     <div className="text-white font-semibold text-lg font-display mb-1">{title}</div>
@@ -709,10 +737,10 @@ export default function App() {
               </div>
 
               {/* Divider */}
-              <div className="h-px bg-white/8" />
+              <div className="h-px bg-white/[0.08]" />
 
               {/* Stat row */}
-              <div className="flex gap-8">
+              <div className="flex flex-wrap" style={{ gap: 'clamp(1rem, 4vw, 2rem)' }}>
                 <div>
                   <div className="text-xl font-display font-bold text-white mb-0.5">30 min</div>
                   <div className="text-xs font-mono text-[#555] uppercase tracking-widest">Discovery call</div>
@@ -728,7 +756,7 @@ export default function App() {
                 href="https://cal.com/kishore-clickfieldai/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group/btn self-start flex items-center gap-4 px-8 py-4 rounded-2xl bg-white text-black font-bold text-base tracking-wide hover:bg-[#00f0ff] transition-all duration-300 hover:shadow-[0_0_40px_-8px_rgba(0,240,255,0.7)]"
+                className="group/btn w-full sm:w-auto self-start flex items-center justify-center gap-4 px-8 py-4 rounded-2xl bg-white text-black font-bold text-base tracking-wide hover:bg-[#00f0ff] active:scale-95 transition-all duration-300 hover:shadow-[0_0_40px_-8px_rgba(0,240,255,0.7)] min-h-[52px]"
               >
                 Book a Growth Mapping Call
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="group-hover/btn:translate-x-1 transition-transform duration-300">
@@ -746,18 +774,21 @@ export default function App() {
 
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/10 pt-32 pb-10 overflow-hidden bg-black text-center">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center mb-24 relative z-10">
+      <footer className="relative z-10 border-t border-white/10 pt-[clamp(3rem,8vw,8rem)] overflow-hidden bg-black text-center safe-bottom">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center mb-16 sm:mb-24 relative z-10">
           <div className="flex items-center justify-center mb-8 w-full">
-            <h2 className="text-6xl md:text-[10vw] font-display font-bold tracking-tighter leading-none text-white">CLICKFIELDAI</h2>
+            <h2 className="text-[clamp(2.5rem,8vw,8rem)] font-display font-bold tracking-tighter leading-none text-white">CLICKFIELDAI</h2>
           </div>
 
-
-          <button className="hidden sm:flex w-14 h-14 rounded-full border border-white/20 items-center justify-center text-[#888888] hover:text-white hover:border-white transition-colors cursor-pointer z-50 pointer-events-auto" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <button
+            className="flex w-14 h-14 rounded-full border border-white/20 items-center justify-center text-[#888888] hover:text-white hover:border-white active:scale-95 transition-all cursor-pointer z-50 pointer-events-auto"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label="Scroll to top"
+          >
             ↑
           </button>
         </div>
-        <div className="text-center text-[#555] text-xs font-mono">
+        <div className="text-center text-[#555] text-xs font-mono pb-4 px-4">
           © {new Date().getFullYear()} ClickfieldAI. Remote global engine.
         </div>
       </footer>
@@ -807,7 +838,7 @@ function FAQSection() {
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section id="faq" className="relative z-10 w-full py-20 px-6 bg-black overflow-hidden">
+    <section id="faq" className="relative z-10 w-full py-16 sm:py-20 px-4 sm:px-6 bg-black overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60vw] h-[30vw] rounded-full bg-[#00f0ff]/3 blur-[120px]" />
@@ -816,8 +847,8 @@ function FAQSection() {
       <div className="max-w-4xl mx-auto relative z-10">
 
         {/* Heading */}
-        <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-7xl font-display font-bold tracking-tight text-white mb-5">
+        <div className="text-center mb-[clamp(2.5rem,5vw,4rem)]">
+          <h2 className="text-[clamp(2rem,5vw,4.5rem)] font-display font-bold tracking-tight text-white mb-5">
             Frequently Asked <span className="text-gradient">Questions</span>
           </h2>
           <p className="text-[#888] text-lg font-sans max-w-2xl mx-auto leading-relaxed">
@@ -837,7 +868,7 @@ function FAQSection() {
                 {/* Question row */}
                 <button
                   onClick={() => toggle(i)}
-                  className="w-full flex items-center justify-between gap-6 px-8 py-6 text-left cursor-pointer"
+                  className="w-full flex items-center justify-between gap-4 px-5 sm:px-8 py-5 sm:py-6 text-left cursor-pointer min-h-[56px]"
                 >
                   <span className={`text-sm md:text-base font-sans font-medium transition-colors duration-300 ${isOpen ? 'text-white' : 'text-[#bbb] group-hover:text-white'}`}>
                     {faq.q}
@@ -855,7 +886,7 @@ function FAQSection() {
                   className="overflow-hidden transition-all duration-500 ease-in-out"
                   style={{ maxHeight: isOpen ? '500px' : '0px', opacity: isOpen ? 1 : 0 }}
                 >
-                  <div className={`px-8 pb-7 border-l-2 ml-8 ${isOpen ? 'border-[#00f0ff]/30' : 'border-transparent'} transition-colors duration-300`}>
+                  <div className={`px-5 sm:px-8 pb-6 sm:pb-7 border-l-2 ml-5 sm:ml-8 ${isOpen ? 'border-[#00f0ff]/30' : 'border-transparent'} transition-colors duration-300`}>
                     <p className="text-[#888] text-sm leading-[1.9] font-sans">
                       {faq.a}
                     </p>

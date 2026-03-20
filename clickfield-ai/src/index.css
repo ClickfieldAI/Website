@@ -17,6 +17,20 @@
   body {
     @apply bg-[var(--color-brand-black)] text-[var(--color-brand-light)] font-sans antialiased m-0 p-0 overflow-x-hidden;
   }
+  *, *::before, *::after {
+    box-sizing: border-box;
+    min-width: 0;
+  }
+  img, video, svg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Hero section svh fallback for older browsers */
+.hero-section {
+  min-height: 100vh;
+  min-height: 100svh;
 }
 
 /* Custom Scrollbar */
@@ -265,4 +279,58 @@
 
 .smoke-3 {
   animation: smoke-morph-1 35s ease-in-out infinite reverse;
+}
+
+/* ─── Safe Area Utilities (iOS notch / Dynamic Island / Android edge) ─── */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: max(2.5rem, calc(2.5rem + env(safe-area-inset-bottom)));
+}
+
+/* ─── Mobile: case study cards become touch-scroll snap container ─── */
+@media (max-width: 767px) {
+  /* Section must NOT clip overflow or child scroll won't work */
+  #case-studies {
+    overflow: visible;
+  }
+
+  .animate-marquee.slow {
+    animation: none !important;
+    width: 100% !important; /* override max-content */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    cursor: default;
+  }
+  .animate-marquee.slow::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide second duplicate loop — only show 4 cards on mobile */
+  .animate-marquee.slow > div:last-child {
+    display: none;
+  }
+  /* Snap per individual card */
+  .animate-marquee.slow > div > div {
+    scroll-snap-align: start;
+  }
+}
+
+/* ─── Touch-device: disable hover-only states ─── */
+@media (hover: none) {
+  .animate-marquee:hover {
+    animation-play-state: running;
+  }
+}
+
+/* ─── Minimum touch target enforcement ─── */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
