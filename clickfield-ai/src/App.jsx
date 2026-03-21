@@ -164,9 +164,10 @@ export default function App() {
 
         {/* Mobile / tablet dropdown — hidden on lg+ */}
         <div
-          className={`lg:hidden mx-4 mt-2 glass-panel rounded-2xl overflow-hidden pointer-events-auto transition-all duration-300 ease-in-out ${
+          className={`lg:hidden mx-4 mt-2 rounded-2xl overflow-hidden pointer-events-auto transition-all duration-300 ease-in-out border border-white/[0.08] ${
             mobileMenuOpen ? 'max-h-[30rem] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
           }`}
+          style={{ background: 'rgba(12,12,12,0.92)', backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)' }}
         >
           <nav className="flex flex-col p-4 gap-0.5" aria-label="Mobile navigation">
             {[
