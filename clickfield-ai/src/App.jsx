@@ -107,8 +107,8 @@ export default function App() {
 
       {/* Background Blobs for specific sections */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div ref={backgroundBlob1Ref} className="absolute blur-[140px] rounded-full w-[45vw] h-[45vw] bg-[#00f0ff] opacity-[0.35] -top-[10%] -left-[10%] mix-blend-screen"></div>
-        <div ref={backgroundBlob2Ref} className="absolute blur-[140px] rounded-full w-[55vw] h-[55vw] bg-[#0055ff] opacity-[0.35] top-[30%] -right-[10%] mix-blend-screen"></div>
+        <div ref={backgroundBlob1Ref} className="absolute blur-[140px] rounded-full w-[45vw] h-[45vw] bg-[#00f0ff] opacity-[0.12] -top-[10%] -left-[10%] mix-blend-screen"></div>
+        <div ref={backgroundBlob2Ref} className="absolute blur-[140px] rounded-full w-[55vw] h-[55vw] bg-[#0055ff] opacity-[0.12] top-[30%] -right-[10%] mix-blend-screen"></div>
       </div>
 
       {/* Floating Header */}
@@ -201,17 +201,19 @@ export default function App() {
       </header>
 
       {/* Hero Section */}
-      <main id="platform" ref={heroRef} className="hero-section relative z-10 flex flex-col justify-end pb-[clamp(3rem,6vw,5rem)] px-[clamp(1.25rem,4vw,6rem)] overflow-hidden" style={{ background: 'radial-gradient(ellipse 100% 80% at 10% 100%, rgba(0,240,255,0.22) 0%, transparent 55%), radial-gradient(ellipse 80% 70% at 90% 5%, rgba(0,85,255,0.20) 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,85,255,0.06) 0%, transparent 70%), #000' }}>
+      <main id="platform" ref={heroRef} className="hero-section relative z-10 flex flex-col justify-end pb-[clamp(3rem,6vw,5rem)] px-[clamp(1.25rem,4vw,6rem)] overflow-hidden" style={{ background: '#080808' }}>
 
-        {/* Subtle grid texture */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
+        {/* Vertical ribbed stripe texture */}
+        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(90deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 7px)' }}></div>
 
-        {/* Decorative glow orbs inside hero */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[8%] right-[6%] w-[min(50vw,420px)] h-[min(50vw,420px)] rounded-full bg-[#0055ff]/20 blur-[90px]"></div>
-          <div className="absolute top-[14%] right-[14%] w-[min(30vw,240px)] h-[min(30vw,240px)] rounded-full bg-[#00f0ff]/10 blur-[60px]"></div>
-          <div className="absolute top-[5%] left-[35%] w-[min(18vw,140px)] h-[min(18vw,140px)] rounded-full bg-[#00f0ff]/8 blur-[50px]"></div>
-        </div>
+        {/* Teal glow — upper center */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 65% 55% at 58% 18%, rgba(0,210,180,0.28) 0%, transparent 65%)' }}></div>
+
+        {/* Deep blue glow — lower right */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 55% 50% at 92% 88%, rgba(0,30,90,0.75) 0%, transparent 60%)' }}></div>
+
+        {/* Vignette edges */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 50%, rgba(0,0,0,0.6) 100%)' }}></div>
 
         {/* Main Content */}
         <div className="relative z-10 w-full flex flex-col items-start mt-[clamp(6rem,14vw,8rem)]">
