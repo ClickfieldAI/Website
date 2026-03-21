@@ -218,13 +218,6 @@ export default function App() {
         {/* Main Content */}
         <div className="relative z-10 w-full flex flex-col items-start mt-[clamp(6rem,14vw,8rem)]">
 
-          {/* Live badge */}
-          <div className="hero-anim mb-5">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/[0.12] bg-white/[0.04] text-xs font-medium text-[#aaa] tracking-wide backdrop-blur-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse shrink-0"></span>
-              AI Revenue Infrastructure · Built for B2B
-            </span>
-          </div>
 
           <h1
             ref={heroTextRef}
